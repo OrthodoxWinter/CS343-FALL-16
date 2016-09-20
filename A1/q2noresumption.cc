@@ -4,17 +4,14 @@ using namespace std;
 
 class Fixup {
 public:
-    virtual void call() = 0;
+    virtual void call(int &i) = 0;
 };
 
 void f( int &i, Fixup &fixup );
 
 class RootFixup : public Fixup {
-private:
-    int &i;
 public:
-    RootFixup(int &i): i(i) {}
-    void call() {
+    void call(int &i) {
         cout << "root " << i << endl;
     }
 };
@@ -22,10 +19,9 @@ public:
 class HandlerFixup : public Fixup {
 private:
     Fixup *prev;
-    int &i;
 public:
-    HandlerFixup(Fixup *prev, int &i): prev(prev), i(i) {}
-    void call() {
+    HandlerFixup(Fixup *prev): prev(prev) {}
+    void call(int &i) {
         cout << "f handler " << i << endl;
         i -= 1;
         f( i, *prev );
@@ -34,9 +30,9 @@ public:
 
 void f( int &i, Fixup &fixup ) {
     cout << "f " << i << endl;
-    if ( rand() % 5 == 0 ) fixup.call();              // require correction ?
+    if ( rand() % 5 == 0 ) fixup.call(i);              // require correction ?
     i -= 1;
-    HandlerFixup newFixup = HandlerFixup( &fixup, i );
+    HandlerFixup newFixup = HandlerFixup( &fixup);
     if ( 0 < i ) f( i, newFixup );
 }
 int main( int argc, const char *argv[] ) {
@@ -48,6 +44,6 @@ int main( int argc, const char *argv[] ) {
       default: cerr << "Usage: " << argv[0] << " times seed" << endl; exit( EXIT_FAILURE );
     }
     srand( seed );                                      // fixed or random seed
-    RootFixup fixup = RootFixup(times);
+    RootFixup fixup = RootFixup();
     f( times, fixup );
 }
