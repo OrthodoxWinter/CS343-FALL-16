@@ -8,7 +8,7 @@ make "$solution"
 for (( i=1; i <= $1; ++i ))
 do
 	seed=$RANDOM
-	numTimes=$(( $RANDOM % 50 ))
+	numTimes=$(( $RANDOM % 100 ))
 	`./"$given" > first_output $numTimes, $seed`
 	`./"$solution" > second_output $numTimes, $seed`
 	echo "=================================================="
