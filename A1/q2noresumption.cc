@@ -4,14 +4,14 @@ using namespace std;
 
 class Fixup {
 public:
-    virtual void call(int &i) = 0;
+    virtual void operator()(int &i) = 0;
 };
 
 void f( int &i, Fixup &fixup );
 
 class RootFixup : public Fixup {
 public:
-    void call(int &i) {
+    void operator()(int &i) {
         cout << "root " << i << endl;
     }
 };
@@ -21,7 +21,7 @@ private:
     Fixup *prev;
 public:
     HandlerFixup(Fixup *prev): prev(prev) {}
-    void call(int &i) {
+    void operator()(int &i) {
         cout << "f handler " << i << endl;
         i -= 1;
         f( i, *prev );
@@ -30,7 +30,7 @@ public:
 
 void f( int &i, Fixup &fixup ) {
     cout << "f " << i << endl;
-    if ( rand() % 5 == 0 ) fixup.call(i);              // require correction ?
+    if ( rand() % 5 == 0 ) fixup(i);              // require correction ?
     i -= 1;
     HandlerFixup newFixup = HandlerFixup( &fixup);
     if ( 0 < i ) f( i, newFixup );
