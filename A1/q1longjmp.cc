@@ -4,6 +4,7 @@ using namespace std;
 #include <unistd.h>				// getpid
 #include <setjmp.h>
 #include <cstring>
+#include <functional>
 
 #ifdef NOOUTPUT
 #define print( x )
@@ -15,32 +16,33 @@ long int freq = 5;
 
 jmp_buf buf;
 
-long int Ackermann( long int m, long int n ) {
+int tryCatch(function< int() > &tryBlock, function< void() > &catchBlock) {
 	jmp_buf tmp;
+	memcpy(tmp, buf, sizeof tmp);
+	if ( !setjmp( buf ) ) {
+		int rtn = tryBlock();
+		memcpy( buf, tmp, sizeof buf );
+		return rtn;
+	} else {
+		catchBlock();
+		memcpy( buf, tmp, sizeof buf );
+		return 0;
+	}
+}
+
+long int Ackermann( long int m, long int n ) {
 	if ( m == 0 ) {
 		if ( random() % freq == 0 ) longjmp(buf, 1);
 		return n + 1;
 	} else if ( n == 0 ) {
 		if ( random() % freq == 0 ) longjmp(buf, 1);
-		memcpy(tmp, buf, sizeof tmp);
-		if ( !setjmp(buf) ) {
-			int rtn = Ackermann( m - 1, 1 );
-			memcpy(buf, tmp, sizeof buf);
-			return rtn;
-		} else {
-			print( cout << "E1 " << m << " " << n << endl );
-			memcpy(buf, tmp, sizeof buf);
-		}
+		function< int() > tryBlock = [m]() { return Ackermann( m - 1, 1 ); };
+		function< void() > catchBlock = [m, n]() { print( cout << "E1 " << m << " " << n << endl ); };
+		return tryCatch( tryBlock, catchBlock );
 	} else {
-		memcpy(tmp, buf, sizeof tmp);
-		if ( !setjmp(buf) ) {
-			int rtn = Ackermann( m - 1, Ackermann( m, n - 1 ) );
-			memcpy(buf, tmp, sizeof buf);
-			return rtn;
-		} else {
-			print( cout << "E2 " << m << " " << n << endl );
-			memcpy(buf, tmp, sizeof buf);
-		}
+		function < int() > tryBlock = [m, n]() { return Ackermann( m - 1, Ackermann( m, n - 1 ) ); };
+		function < void() > catchBlock = [m, n]() { print( cout << "E2 " << m << " " << n << endl ); };
+		return tryCatch( tryBlock, catchBlock );
 	}
 	return 0;	// recover by returning 0
 }
