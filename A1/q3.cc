@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -9,78 +10,62 @@ public:
 	enum Status { CONT, MATCH };
 private:
 	char ch;
-	int mantissaLength;
-	int exponentLength;
 	Status status;
 	
 	void main() {
-		mantissaLength = 0;
-		exponentLength = 0;
 		status = CONT;
 		optSign();
-		bool noDigit = !mantissaDigits();
+		int length1 = digitSequence(16, CONT);
 		switch ( ch ) {
-			case '.': 	//fractional constant
-				if ( !noDigit ) status = MATCH;
+			case '.': { 	//fractional constant
+				if ( length1 > 0 ) status = MATCH;
 				suspend();
-	    		if ( !mantissaDigits( MATCH ) && noDigit ) throw Error(1);
+	    		int length2 = digitSequence(16 - length1, MATCH);
+				if (length1 + length2 <= 0) throw Error();
 		    	exponentPart();
-    		 	status = MATCH;
 		    	break;
+		    }
 		  	case 'e':
 		  	case 'E':
-		  		if (noDigit) throw Error(7);
+  				if (length1 <= 0) throw Error();
 		    	exponentPart();
 		    	break;
 		  	default: 
-		  		throw Error(2);
+		  		throw Error();
 	 	}
-		if ( !( ch == 'f' || ch == 'l' || ch == 'F' || ch == 'L' ) ) throw Error(3);
+		if ( !( ch == 'f' || ch == 'l' || ch == 'F' || ch == 'L' ) ) throw Error();
 		suspend();
-		throw Error(6);
+		throw Error();
 	}
 
 	void optSign() {
 		if ( ch == '+' || ch == '-' ) suspend();
 	}
 
-	bool mantissaDigits( Status onSuspend = CONT ) {
-		return digitSequence(mantissaLength, 16, onSuspend);
-	}
-
-	bool digitSequence( int &length, int max, Status onSuspend ) {
-		bool nonEmpty = false;
-		for ( ;; ) {
-			if ( !isdigit( ch ) ) break;
-			if ( length >= max ) throw Error(4);
-			nonEmpty = true;
-			length++;
+	int digitSequence( int max, Status onSuspend ) {
+		int length;
+		for (length = 0; length < max; length++) {
+			if ( !isdigit( ch ) ) return length;
 			status = onSuspend;
 			suspend();
 		}
-		return nonEmpty;
+		return length;
 	}
 
 	bool exponentPart() {
-		status = CONT;
 		if ( ch == 'e' || ch == 'E' ) {
+			status = CONT;
 			suspend();
 		} else {
 			return false;
 		}
 		optSign();
-		if ( !digitSequence( exponentLength, 3, MATCH ) ) throw Error(5);
+		if ( digitSequence( 3, MATCH ) <= 0 ) throw Error();
 		return true;
 	}
 
 public:
-	_Event Error {
-	public:
-		int type;
-		Error(int type): type(type) {
-			cout << " Exception type: " << type << " ";
-		}
-	};
+	_Event Error {};
 	Status next( char c ) {
 		ch = c;
 		resume();
@@ -88,9 +73,31 @@ public:
 	}
 };
 
+
+void usage( char *argv[] ) {
+    cerr << "Usage: " << argv[0]
+	 << " [infile-file]" << endl;
+    exit( EXIT_FAILURE );
+}
+
 void uMain::main() {
 
     istream *infile = &cin;
+
+    switch (argc) {
+    	case 2: 
+    		try {
+    			infile = new ifstream(argv[1]);
+    		} catch (uFile::Failure) {
+    			cerr << "Error! Could not open input file \"" << argv[0] << "\"" << endl;
+	    		usage( argv );
+    		}
+    		break;
+    	case 1:
+    		break;
+		default:
+			usage(argv);
+    }
 
     string str;
     for ( ;; ) {
@@ -98,7 +105,7 @@ void uMain::main() {
 		if ( !getline(*infile, str) ) break;
 		cout << "\"" << str << "\" : ";
 		if (str == "") {
-			cout << "Warning! Blank Line." << endl;
+			cout << "Warning! Blank line." << endl;
 			continue;
 		}
 		unsigned int i;
@@ -116,7 +123,7 @@ void uMain::main() {
 	      	} else {
 	      		cout << "no" << endl;
 	      	}
-	  	} catch (...) {
+	  	} catch (uBaseCoroutine::UnhandledException) {
 	  		cout << "\" no";
 	  		if (i < str.length() - 1) cout << " -- extraneous characters \"" << str.substr(i + 1, string::npos) <<"\"";
 	  		cout << endl;
