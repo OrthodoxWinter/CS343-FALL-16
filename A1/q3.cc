@@ -21,21 +21,21 @@ private:
 				if ( length1 > 0 ) status = MATCH;
 				suspend();
 	    		int length2 = digitSequence(16 - length1, MATCH);
-				if (length1 + length2 <= 0) throw Error();
+				if (length1 + length2 <= 0)  Error();
 		    	exponentPart();
 		    	break;
 		    }
 		  	case 'e':
 		  	case 'E':
-  				if (length1 <= 0) throw Error();
+  				if (length1 <= 0) _Throw Error();
 		    	exponentPart();
 		    	break;
 		  	default: 
-		  		throw Error();
+		  		_Throw Error();
 	 	}
-		if ( !( ch == 'f' || ch == 'l' || ch == 'F' || ch == 'L' ) ) throw Error();
+		if ( !( ch == 'f' || ch == 'l' || ch == 'F' || ch == 'L' ) ) _Throw Error();
 		suspend();
-		throw Error();
+		_Throw Error();
 	}
 
 	void optSign() {
@@ -60,7 +60,7 @@ private:
 			return false;
 		}
 		optSign();
-		if ( digitSequence( 3, MATCH ) <= 0 ) throw Error();
+		if ( digitSequence( 3, MATCH ) <= 0 ) _Throw Error();
 		return true;
 	}
 
