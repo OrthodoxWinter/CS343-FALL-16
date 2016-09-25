@@ -9,8 +9,8 @@ for (( i=1; i <= $1; ++i ))
 do
 	seed=$RANDOM
 	numTimes=$(( $RANDOM % 100 ))
-	`./"$given" > first_output $numTimes, $seed`
-	`./"$solution" > second_output $numTimes, $seed`
+	`./"$given" $numTimes, $seed > first_output`
+	`./"$solution" $numTimes, $seed > second_output`
 	echo "=================================================="
 	echo "seed: $seed"
 	diff -q first_output second_output

@@ -1,0 +1,9 @@
+Measurements:
+q1longjmp.cc -O0 : 30.284s
+q1.cc -O0 : 58.228s
+q1longjmp.cc -O2 : 20.464s
+q1.cc -O2 : 43.535s
+
+Without optimization, the original program takes a little under twice the time to execute compared to the transformed program. With optimization, the original program takes a little over twice the time to execute compared to the transformed program. Therefore the original program is twice as slow, regardless of optimization.
+
+The performance difference should be the result of how exceptions are implemented in the two programs. What I guess is happening is that in the original program, when an exception is thrown, it dynamically looks down the stack to find a handler at runtime. This is much slower than the approach used in transformed program, which is to use setjmp and longjmp to allow handlers to be activated statically. 

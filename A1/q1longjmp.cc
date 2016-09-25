@@ -44,12 +44,11 @@ long int Ackermann( long int m, long int n ) {
 		function < void() > catchBlock = [ m, n ] () { print( cout << "E2 " << m << " " << n << endl ); };
 		return tryCatch( tryBlock, catchBlock );
 	}
-	return 0;	// recover by returning 0
 }
 
 int main( int argc, const char *argv[] ) {
 	long int Ackermann( long int m, long int n );
-	long int m = 4, n = 6, seed = getpid();	// default values
+	long int m = 4, n = 6, seed = getpid();
 
 	switch ( argc ) {
 	  case 5: freq = atoi( argv[4] );

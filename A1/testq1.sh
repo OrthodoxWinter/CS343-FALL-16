@@ -10,8 +10,8 @@ do
 	seed=$RANDOM
 	numM=$(( $RANDOM % 30 ))
 	numN=$(( $RANDOM % 30 ))
-	`./"$given" > first_output $numM, $numN, $seed`
-	`./"$solution" > second_output $numM, $numN, $seed`
+	`./"$given" $numM, $numN, $seed > first_output`
+	`./"$solution" $numM, $numN, $seed > second_output`
 	echo "=================================================="
 	echo "seed: $seed"
 	diff -q first_output second_output
