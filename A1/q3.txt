@@ -1,0 +1,7 @@
+Test | Lines | type of test |  purpose | Analysis
+1 | 1 to 4 | general | Float constants with all optional parts missing (no sign at front, no exponent sign, and no suffix) | Float constants verified by program
+2 | 5 to 8 | general | Float constants with plus/minus sign at the front | Float constants verified by program
+3 | 6 to 13 | general | Float constants with different float suffix (ending with F, f, L, and l) | float constants verified by program
+4 | 14 to 25 | general | Float constants with different types of exponents. This test includes exponents with and without signs, exponents with 1, 2, and 3 digits, and exponents with "e" and "E" | Floar constants verified by program
+5 | 25 to 28 | general | float constants with all optional parts presents. These foat constants have signs in front, exponents with signs, and suffix | Float constants verified by program 
+6 | 

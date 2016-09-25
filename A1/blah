@@ -1,0 +1,106 @@
+Script started on Sun 25 Sep 2016 10:34:35 PM EDT
+]0;bowen@ubuntu: ~/CS343/A1[01;32mbowen@ubuntu[00m:[01;34m~/CS343/A1[00m$ exitcat blah./floatconstant q3test
+"123.45" : "123.45" yes
+"12345." : "12345." yes
+".12345" : ".12345" yes
+"12345E1" : "12345E1" yes
+"+123.45" : "+123.45" yes
+"-123.45" : "-123.45" yes
+"+12345E12" : "+12345E12" yes
+"-12345E12" : "-12345E12" yes
+"123.45F" : "123.45F" yes
+"123.45f" : "123.45f" yes
+"123.45L" : "123.45L" yes
+"123.45l" : "123.45l" yes
+"12345E1F" : "12345E1F" yes
+"12345E1f" : "12345E1f" yes
+"12345E1L" : "12345E1L" yes
+"12345E1l" : "12345E1l" yes
+"123.45e1" : "123.45e1" yes
+"123.45E1" : "123.45E1" yes
+"123.45E+1" : "123.45E+1" yes
+"123.45E-1" : "123.45E-1" yes
+"123.45E12" : "123.45E12" yes
+"123.45E123" : "123.45E123" yes
+"12345e1" : "12345e1" yes
+"12345E1" : "12345E1" yes
+"12345E+1" : "12345E+1" yes
+"12345E-1" : "12345E-1" yes
+"12345E12" : "12345E12" yes
+"12345E123" : "12345E123" yes
+"+.12345E+123l" : "+.12345E+123l" yes
+"+123.45e+123f" : "+123.45e+123f" yes
+"+.12345E+123F" : "+.12345E+123F" yes
+"-12345e-123L" : "-12345e-123L" yes
+"123.45E1234" : "123.45E1234" no
+"123.45E1234567" : "123.45E1234" no -- extraneous characters "567"
+"12345E1234" : "12345E1234" no
+"12345E1234567" : "12345E1234" no -- extraneous characters "567"
+"123.45E+1234" : "123.45E+1234" no
+"123.45E-1234567" : "123.45E-1234" no -- extraneous characters "567"
+"12345E+1234" : "12345E+1234" no
+"12345E-1234567" : "12345E-1234" no -- extraneous characters "567"
+"1234567890.123456" : "1234567890.123456" yes
+".1234567890123456" : ".1234567890123456" yes
+"1234567890123456." : "1234567890123456." yes
+"1234567890.123456E123" : "1234567890.123456E123" yes
+"1234567890123456E123" : "1234567890123456E123" yes
+"+.E+12F" : "+.E" no -- extraneous characters "+12F"
+".F" : ".F" no
+"+." : "+." no
+"." : "." no
+"+E+12F" : "+E" no -- extraneous characters "+12F"
+"+E+12F" : "+E" no -- extraneous characters "+12F"
+"E12F" : "E" no -- extraneous characters "12F"
+"1234567890.1234567" : "1234567890.1234567" no
+"12345678901234567.1234" : "12345678901234567" no -- extraneous characters ".1234"
+"1234.12345678901234567" : "1234.1234567890123" no -- extraneous characters "4567"
+"12345678901234567." : "12345678901234567" no -- extraneous characters "."
+"12345678901234.12345678" : "12345678901234.123" no -- extraneous characters "45678"
+".12345678901234567890" : ".12345678901234567" no -- extraneous characters "890"
+"12345678901234567E1" : "12345678901234567" no -- extraneous characters "E1"
+"12345678901234567890E1" : "12345678901234567" no -- extraneous characters "890E1"
+"" : Warning! Blank line.
+"^&*()" : "^" no -- extraneous characters "&*()"
+"EF" : "E" no -- extraneous characters "F"
+"BLAH" : "B" no -- extraneous characters "LAH"
+"1234*df123FFsS" : "1234*" no -- extraneous characters "df123FFsS"
+"D234433.2" : "D" no -- extraneous characters "234433.2"
+"*FD2313." : "*" no -- extraneous characters "FD2313."
+"1232.132S" : "1232.132S" no
+"2424.343GAD" : "2424.343G" no -- extraneous characters "AD"
+"123.45FF" : "123.45FF" no
+"123.45F123" : "123.45F1" no -- extraneous characters "23"
+"12345" : "12345" no
+"12345F" : "12345F" no
+"12345e" : "12345e" no
+"12345e+" : "12345e+" no
+"123.45e" : "123.45e" no
+"123.45e-L" : "123.45e-L" no
+"1234.56Lz" : "1234.56Lz" no
+"12345e-12lf" : "12345e-12lf" no
+":" : ":" no
+"0e0" : "0e0" yes
+"0." : "0." yes
+".0" : ".0" yes
+"0.0" : "0.0" yes
+"	12345.l" : "	" no -- extraneous characters "12345.l"
+"123 .456" : "123 " no -- extraneous characters ".456"
+"12345.E12f  " : "12345.E12f " no -- extraneous characters " "
+"1234E1234L" : "1234E1234" no -- extraneous characters "L"
+"123.456XE34Lz" : "123.456X" no -- extraneous characters "E34Lz"
+".123.456E34 L" : ".123." no -- extraneous characters "456E34 L"
+"++1234.56" : "++" no -- extraneous characters "1234.56"
+"--1234.56" : "--" no -- extraneous characters "1234.56"
+"1234eEl" : "1234eE" no -- extraneous characters "l"
+"123eFf" : "123eF" no -- extraneous characters "f"
+".1234E--F" : ".1234E--" no -- extraneous characters "F"
+"S1234.56" : "S" no -- extraneous characters "1234.56"
+"12345.ek13" : "12345.ek" no -- extraneous characters "13"
+" 1234.56e*12" : " " no -- extraneous characters "1234.56e*12"
+"1234&56g12" : "1234&" no -- extraneous characters "56g12"
+"12345(12" : "12345(" no -- extraneous characters "12"
+]0;bowen@ubuntu: ~/CS343/A1[01;32mbowen@ubuntu[00m:[01;34m~/CS343/A1[00m$ exit
+exit
+
+Script done on Sun 25 Sep 2016 10:34:40 PM EDT
