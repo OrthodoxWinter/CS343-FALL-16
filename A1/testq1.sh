@@ -8,8 +8,8 @@ make "$solution"
 for (( i=1; i <= $1; ++i ))
 do
 	seed=$RANDOM
-	numM=$(( $RANDOM % 30 ))
-	numN=$(( $RANDOM % 30 ))
+	numM=$(( $RANDOM % 40 ))
+	numN=$(( $RANDOM % 40 ))
 	`./"$given" $numM, $numN, $seed > first_output`
 	`./"$solution" $numM, $numN, $seed > second_output`
 	echo "=================================================="

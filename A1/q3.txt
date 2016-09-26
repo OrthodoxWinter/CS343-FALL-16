@@ -1,7 +1,236 @@
-Test | Lines | type of test |  purpose | Analysis
-1 | 1 to 4 | general | Float constants with all optional parts missing (no sign at front, no exponent sign, and no suffix) | Float constants verified by program
-2 | 5 to 8 | general | Float constants with plus/minus sign at the front | Float constants verified by program
-3 | 6 to 13 | general | Float constants with different float suffix (ending with F, f, L, and l) | float constants verified by program
-4 | 14 to 25 | general | Float constants with different types of exponents. This test includes exponents with and without signs, exponents with 1, 2, and 3 digits, and exponents with "e" and "E" | Floar constants verified by program
-5 | 25 to 28 | general | float constants with all optional parts presents. These foat constants have signs in front, exponents with signs, and suffix | Float constants verified by program 
-6 | 
+Test | Line # | Purpose                                                                                             | Analysis
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1  | 1 to 4   | Float constants with all optional parts missing (no sign at front, no exponent sign, and no suffix) | Float constants verified by program
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2  | 5 to 8   | Float constants with plus/minus sign at the front                                                   | Float constants verified by program
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3  | 9 to 16  | Float constants with different float suffix (ending with F, f, L, and l)                            | Float constants verified by program
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4  | 17 to 28 | Float constants with different types of exponents. This test includes exponents with and without    | Floar constants verified by program
+   |          | signs, exponents with 1, 2, and 3 digits, and exponents with "e" and "E"                            | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5  | 29 to 32 | Float constants with all optional parts presents. These foat constants have signs in front,         | Float constants verified by program 
+   |          | exponents with signs, and suffix                                                                    | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+6  | 33 to 40 | Float constnats with exponents having more than 4 digits                                            | Float constants rejected by program. Program stops parsing after the 4th exponent
+   |          |                                                                                                     | digits and correctly printing extraneous characters
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+7  | 41 to 43 | Float constants with max mantissa digits                                                            | Float constants verified by program
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+8  | 46 to 52 | Float constants with no mantissa digits. This is meant to test the program's control structure for  | Strings rejected by program. Program stop parsing at the correct point, which is at
+   |          | accpeting mantissa digits, making sure that it stop parsing when it realizes there's no mantissa    | the "." character or exponent character.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+9  | 53 to 60 | Float constants with too many mantissa digits. This is meant to test the program's behavior of      | Strings rejected by program. Program correctly stops parsing at the first extra
+   |          | accepting at most 16 mantissa digits                                                                | mantissa digit
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+10 | 61 to 68 | Strings with characters not part of float constants. Program should stop parsing at first non-valid | Strings rejected by program. Program stops parsing at first non-valid character
+   |          | character                                                                                           | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+11 | 69 to 70 | Strings which are float constants but with extra character after suffix. This is meant to test that | Strings rejected by program, and extraneous characters correctly printed out
+   |          | program correctly rejects when characters are read after parsing is finished                        | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+12 | 71 to 76 | Strings which are float constants but with exponents having no digits, which should result in       | Strings rejected by program, and program stops parsing at first character after "e"
+   |          | exception. This is to test the control structure of parsing exponents, making sure it stops when    | or "E"
+   |          | there are no digits                                                                                 | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+13 | 77 to 79 | Strings where should cause coroutine to throw exception, but the rejection occurs at the last       | Program rejects strings but does not print extraneous character warning
+   |          | character. This is to test that program doesn't print warning if it catches an exception but there  |
+   |          | are no more characters                                                                              | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+14 | 80 to 83 | Float constants where digit sequence components consist of single digits. This is to test boundary  | Float constants correctly verified by program
+   |          | case behaviour.                                                                                     | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+15 | 84 to 86 | Float constants with white space characters. This is to test the input behaviour of program to      | Strings rejected by program, and program stop parsing when encountering first white
+   |          | correctly identify white space characters as invalid                                                | space character.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+16 | 87 to 89 | Strings that have multiple invalid character. This is to test that program stop parsing when        | String rejected by program, and parsing stop at first invalid character
+   |          | encountering first invalid character                                                                | 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+17 | 90       | Empty line. Program should print warning                                                            | Program prints out correct warning
+
+
+Input Test File:
+
+1	123.45
+2 	12345.
+3 	.12345
+4 	12345E1
+5	+123.45
+6	-123.45
+7	+12345E12
+8	-12345E12
+9	123.45F
+10	123.45f
+11	123.45L
+12	123.45l
+13	12345E1F
+14	12345E1f
+15	12345E1L
+16	12345E1l
+17	123.45e1
+18	123.45E1
+19	123.45E+1
+20	123.45E-1
+21	123.45E12
+22	123.45E123
+23	12345e1
+24	12345E1
+25	12345E+1
+26	12345E-1
+27	12345E12
+28	12345E123
+29	+.12345E+123l
+30	+123.45e+123f
+31	+.12345E+123F
+32	-12345e-123L
+33	123.45E1234
+34	123.45E1234567
+35	12345E1234
+36	12345E1234567
+37	123.45E+1234
+38	123.45E-1234567
+39	12345E+1234
+40	12345E-1234567
+41	1234567890.123456
+42	.1234567890123456
+43	1234567890123456.
+44	1234567890.123456E123
+45	1234567890123456E123
+46	+.E+12F
+47	.F
+48	+.
+49	.
+50	+E+12F
+51	+E+12F
+52	E12F
+53	1234567890.1234567
+54	12345678901234567.1234
+55	1234.12345678901234567
+56	12345678901234567.
+57	12345678901234.12345678
+58	.12345678901234567890
+59	12345678901234567E1
+60	12345678901234567890E1
+61	^&*()
+62	EF
+63	BLAH
+64	1234*df123FFsS
+65	D234433.2
+66	*FD2313.
+67	1232.132S
+68	2424.343GAD
+69	123.45FF
+70	123.45F123
+71	12345
+72	12345F
+73	12345e
+74	12345e+
+75	123.45e
+76	123.45e-L
+77	1234.56Lz
+78	12345e-12lf
+79	:
+80	0e0
+81	0.
+82	.0
+83	0.0
+84		12345.l
+85	123 .456
+86	12345.E12f  
+87	1234E1234L
+88	123.456XE34Lz
+89  .123.456E34 L
+90
+
+Program output:
+
+1   "123.45" : "123.45" yes
+2   "12345." : "12345." yes
+3   ".12345" : ".12345" yes
+4   "12345E1" : "12345E1" yes
+5   "+123.45" : "+123.45" yes
+6   "-123.45" : "-123.45" yes
+7   "+12345E12" : "+12345E12" yes
+8   "-12345E12" : "-12345E12" yes
+9   "123.45F" : "123.45F" yes
+10  "123.45f" : "123.45f" yes
+11  "123.45L" : "123.45L" yes
+12  "123.45l" : "123.45l" yes
+13  "12345E1F" : "12345E1F" yes
+14  "12345E1f" : "12345E1f" yes
+15  "12345E1L" : "12345E1L" yes
+16  "12345E1l" : "12345E1l" yes
+17  "123.45e1" : "123.45e1" yes
+18  "123.45E1" : "123.45E1" yes
+19  "123.45E+1" : "123.45E+1" yes
+20  "123.45E-1" : "123.45E-1" yes
+21  "123.45E12" : "123.45E12" yes
+22  "123.45E123" : "123.45E123" yes
+23  "12345e1" : "12345e1" yes
+24  "12345E1" : "12345E1" yes
+25  "12345E+1" : "12345E+1" yes
+26  "12345E-1" : "12345E-1" yes
+27  "12345E12" : "12345E12" yes
+28  "12345E123" : "12345E123" yes
+29  "+.12345E+123l" : "+.12345E+123l" yes
+30  "+123.45e+123f" : "+123.45e+123f" yes
+31  "+.12345E+123F" : "+.12345E+123F" yes
+32  "-12345e-123L" : "-12345e-123L" yes
+33  "123.45E1234" : "123.45E1234" no
+34  "123.45E1234567" : "123.45E1234" no -- extraneous characters "567"
+35  "12345E1234" : "12345E1234" no
+36  "12345E1234567" : "12345E1234" no -- extraneous characters "567"
+37  "123.45E+1234" : "123.45E+1234" no
+38  "123.45E-1234567" : "123.45E-1234" no -- extraneous characters "567"
+39  "12345E+1234" : "12345E+1234" no
+40  "12345E-1234567" : "12345E-1234" no -- extraneous characters "567"
+41  "1234567890.123456" : "1234567890.123456" yes
+42  ".1234567890123456" : ".1234567890123456" yes
+43  "1234567890123456." : "1234567890123456." yes
+44  "1234567890.123456E123" : "1234567890.123456E123" yes
+45  "1234567890123456E123" : "1234567890123456E123" yes
+46  "+.E+12F" : "+.E" no -- extraneous characters "+12F"
+47  ".F" : ".F" no
+48  "+." : "+." no
+49  "." : "." no
+50  "+E+12F" : "+E" no -- extraneous characters "+12F"
+51  "+E+12F" : "+E" no -- extraneous characters "+12F"
+52  "E12F" : "E" no -- extraneous characters "12F"
+53  "1234567890.1234567" : "1234567890.1234567" no
+54  "12345678901234567.1234" : "12345678901234567" no -- extraneous characters ".1234"
+55  "1234.12345678901234567" : "1234.1234567890123" no -- extraneous characters "4567"
+56  "12345678901234567." : "12345678901234567" no -- extraneous characters "."
+57  "12345678901234.12345678" : "12345678901234.123" no -- extraneous characters "45678"
+58  ".12345678901234567890" : ".12345678901234567" no -- extraneous characters "890"
+59  "12345678901234567E1" : "12345678901234567" no -- extraneous characters "E1"
+60  "12345678901234567890E1" : "12345678901234567" no -- extraneous characters "890E1"
+61  "^&*()" : "^" no -- extraneous characters "&*()"
+62  "EF" : "E" no -- extraneous characters "F"
+63  "BLAH" : "B" no -- extraneous characters "LAH"
+64  "1234*df123FFsS" : "1234*" no -- extraneous characters "df123FFsS"
+65  "D234433.2" : "D" no -- extraneous characters "234433.2"
+66  "*FD2313." : "*" no -- extraneous characters "FD2313."
+67  "1232.132S" : "1232.132S" no
+68  "2424.343GAD" : "2424.343G" no -- extraneous characters "AD"
+69  "123.45FF" : "123.45FF" no
+70  "123.45F123" : "123.45F1" no -- extraneous characters "23"
+71  "12345" : "12345" no
+72  "12345F" : "12345F" no
+73  "12345e" : "12345e" no
+74  "12345e+" : "12345e+" no
+75  "123.45e" : "123.45e" no
+76  "123.45e-L" : "123.45e-L" no
+77  "1234.56Lz" : "1234.56Lz" no
+78  "12345e-12lf" : "12345e-12lf" no
+79  ":" : ":" no
+80  "0e0" : "0e0" yes
+81  "0." : "0." yes
+82  ".0" : ".0" yes
+83  "0.0" : "0.0" yes
+84  "	12345.l" : "	" no -- extraneous characters "12345.l"
+85  "123 .456" : "123 " no -- extraneous characters ".456"
+86  "12345.E12f  " : "12345.E12f " no -- extraneous characters " "
+87  "1234E1234L" : "1234E1234" no -- extraneous characters "L"
+88  "123.456XE34Lz" : "123.456X" no -- extraneous characters "E34Lz"
+89  ".123.456E34 L" : ".123." no -- extraneous characters "456E34 L"
+90  "" : Warning! Blank line.
