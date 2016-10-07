@@ -2,12 +2,13 @@
 #define __UMPIRE_H__ 1
 
 #include "q2player.h"
+#include "q2potato.h"
 
 _Coroutine Umpire {
     Player::PlayerList &players;
-    Potato potato;
+    unsigned int eliminatedPlayerId;
     void main();
-    unsigned int indexById(unsigned int Id);
+    int indexById(unsigned int Id);
   public:
     Umpire( Player::PlayerList &players );
     void set( unsigned int player );

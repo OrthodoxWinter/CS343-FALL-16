@@ -1,25 +1,34 @@
-class Potato {
-    // YOU ADD MEMBERS HERE
-  public:
-    _Event Explode {};
-    Potato( unsigned int maxTicks = 10 );
-    void reset( unsigned int maxTicks = 10 );
-    void countdown();
-};
+#include "q2player.h"
+#include "q2umpire.h"
+#include "q2potato.h"
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <utility>
+#include <stdlib.h>
 
-_Coroutine Player {
-    // YOU ADD MEMBERS HERE
-    void main();
-  public:
-    typedef ... PlayerList; // container type of your choice
-    Player( Umpire &umpire, unsigned int Id, const PlayerList &players );
-    void toss( Potato &potato );
-};
+using namespace std;
 
-_Coroutine Umpire {
-    // YOU ADD MEMBERS HERE
-    void main();
-  public:
-    Umpire( Player::PlayerList &players );
-    void set( unsigned int player );
-};
+void uMain::main() {
+
+    istream *infile = &cin;                                                             // default input is cin
+
+    int numPlayers = atoi(argv[1]);
+    uint32_t seed = (uint32_t) atoi(argv[2]);
+
+    rng.seed(seed);
+    vector<pair<unsigned int, Player*>> players;
+    Umpire umpire(players);
+
+    cout << numPlayers << " " << seed << endl;
+
+    for (int i = 0; i < numPlayers; i++) {
+        Player* player = new Player(umpire, i, players);
+        pair<unsigned int, Player*> pair(i, player);
+        players.push_back(pair);
+    }
+
+    umpire.set(0);
+
+    if ( infile != &cin ) delete infile;                                                // close file if applicable
+}

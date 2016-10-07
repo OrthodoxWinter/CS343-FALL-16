@@ -14,31 +14,28 @@ template<typename T> _Coroutine Binsertsort {
         left = NULL;
         right = NULL;
         nodeValue = value;
-        if (nodeValue != Sentinel) suspend();
-        for (;;) {
-            if (value == Sentinel) { 
-                cout << "sentinel value";
-                break;
-            }
-            Binsertsort<T> **child;
-            if (value < nodeValue) {
-                child = &left;
-            } else {
-                child = &right;
-            }
-            cout << "child is " << child << endl;
-            if ((*child) == NULL) {
-                (*child) = new Binsertsort<T>(Sentinel);
-            }
-            (*child)->sort(value);
-            suspend();
-        }
         suspend();
+        if (nodeValue != Sentinel) {
+            Binsertsort<T> leftChild(Sentinel);
+            Binsertsort<T> rightChild(Sentinel);
+            left = &leftChild;
+            right = &rightChild;
+            for (;;) {
+                if (value == Sentinel) { 
+                    cout << "sentinel value" << endl;
+                    break;
+                }
+                Binsertsort<T> *child = value < nodeValue? left : right;
+                cout << "child is " << child << endl;
+                child->sort(value);
+                suspend();
+            }
 
-        //note that this coroutine is written such that if nodeValue is Sentinel, then left and right will always be NULL
-
-        if (left != NULL) {
             left->sort(Sentinel);
+            right->sort(Sentinel);
+
+            suspend();
+
             for (;;) {
                 value = left->retrieve();
                 if (value != Sentinel) {
@@ -47,12 +44,10 @@ template<typename T> _Coroutine Binsertsort {
                     break;
                 }
             }
-        }
-        value = nodeValue;
-        if (nodeValue != Sentinel) suspend();
 
-        if (right != NULL) {
-            right->sort(Sentinel);
+            value = nodeValue;
+            suspend();
+
             for (;;) {
                 value = right->retrieve();
                 if (value != Sentinel) {
@@ -62,7 +57,6 @@ template<typename T> _Coroutine Binsertsort {
                 }
             }
         }
-        
         value = Sentinel;
         suspend();
     }
@@ -75,10 +69,6 @@ template<typename T> _Coroutine Binsertsort {
     T retrieve() {               // retrieve sorted value
         resume();
         return value;
-    }
-    ~Binsertsort() {
-        delete left;
-        delete right;
     }
 };
 
@@ -120,11 +110,11 @@ void uMain::main() {
     for (;;) {
         cout << "retrieve" << endl;
         int sortedValue = sort.retrieve();
+        cout <<"!!!" << sortedValue << " ";
         if (sortedValue == -1) {
             cout << "end";
             break;
         }
-        cout <<"!!!" << sortedValue << " ";
     }
 
     if ( infile != &cin ) delete infile;                                                // close file if applicable

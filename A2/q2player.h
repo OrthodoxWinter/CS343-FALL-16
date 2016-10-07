@@ -3,19 +3,21 @@
 
 #include <vector>
 #include <utility>
-#include "PRNG.h"
+#include "q2potato.h"
 
 _Coroutine Umpire;
 
 _Coroutine Player {
-	const PlayerList &players;
-	Umpire &umpire;
-	unsigned int eliminatePlayerId;
-    void main();
   public:
-    typedef std::vector< std::pair< int, Player* > > PlayerList; // container type of your choice
+    typedef std::vector< std::pair< unsigned int, Player* > > PlayerList; // container type of your choice
     Player( Umpire &umpire, unsigned int Id, const PlayerList &players );
     void toss( Potato &potato );
+  private:
+  	Umpire &umpire;
+    unsigned int Id;
+	const PlayerList &players;
+	Potato *potato;
+    void main();
 };
 
 #endif

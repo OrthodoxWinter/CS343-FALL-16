@@ -1,16 +1,22 @@
 #include "q2potato.h"
-#include "PRNG.h"
 #include <unistd.h>
+#include <iostream>
 
-Potato::Potato( unsigned int maxTicks = 10 ) {
+using namespace std;
+
+PRNG rng;
+
+Potato::Potato( unsigned int maxTicks ) {
 	reset(maxTicks);
 }
 
-void Potato::reset( unsigned int maxTicks = 10 ) {
-	ticks = rng(maxTicks) + 1;
+void Potato::reset( unsigned int maxTicks ) {
+	ticks = rng(maxTicks - 1) + 1;
+	cout << "Potato will explode after " << ticks << " ticks" << endl;
 }
 
 void Potato::countdown() {
-	tick--;
-	if (tick == 0) _Throw Explode();
+	ticks--;
+	cout << "tick " << ticks << endl;
+	if (ticks <= 0) _Throw Explode();
 }
