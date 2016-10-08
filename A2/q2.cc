@@ -20,8 +20,6 @@ void uMain::main() {
     vector<pair<unsigned int, Player*>> players;
     Umpire umpire(players);
 
-    cout << numPlayers << " " << seed << endl;
-
     for (int i = 0; i < numPlayers; i++) {
         Player* player = new Player(umpire, i, players);
         pair<unsigned int, Player*> pair(i, player);

@@ -8,6 +8,7 @@ Player::Player( Umpire &umpire, unsigned int Id, const PlayerList &players ): um
 
 void Player::toss(Potato &potato) {
 	this->potato = &potato;
+	cout << "-> " << Id << " ";
 	resume();
 }
 
@@ -20,11 +21,9 @@ void Player::main() {
 			if (Id == players.at(next).first) {
 				next = (next + 1) % remaining;
 			}
-			cout << "tossing to " << next << "th player" << endl;
 			players.at(next).second->toss(*potato);
 		}
 	} catch (Potato::Explode &e) {
-		cout << "Explode" << endl;
 		umpire.set(Id);
 	}
 }

@@ -12,11 +12,14 @@ Potato::Potato( unsigned int maxTicks ) {
 
 void Potato::reset( unsigned int maxTicks ) {
 	ticks = rng(maxTicks - 1) + 1;
-	cout << "Potato will explode after " << ticks << " ticks" << endl;
+	cout << "  POTATO goes off after " << ticks << " toss";
+	if (ticks > 1) {
+		cout << "es";
+	}
+	cout << endl;
 }
 
 void Potato::countdown() {
 	ticks--;
-	cout << "tick " << ticks << endl;
 	if (ticks <= 0) _Throw Explode();
 }

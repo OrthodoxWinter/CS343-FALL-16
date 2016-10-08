@@ -11,22 +11,26 @@ void Umpire::set( unsigned int Id ) {
 }
 
 void Umpire::main() {
-	Potato potato;
 	unsigned int initial = players.size();
-	cout << initial << " players" << endl;
-	for (unsigned int i = 0; i < initial - 1; i++) {
+	cout << initial << " players in the match" << endl;
+	Potato potato;
+	int set = 1;
+	for (;;) {
+		cout << "Set " << set << ":\tU ";
 		uint32_t x = rng(players.size() - 1);
-		cout << "generated " << x << endl;
 		players.at(x).second->toss(potato);
+
+		cout << "is eliminated" << endl;
 		int index = indexById(eliminatedPlayerId);
-		cout << "player id: " << eliminatedPlayerId << " with position " << index << " is eliminated" << endl;
 		Player *eliminatedPlayer = players.at(index).second;
 		players.erase(players.begin() + index);
 		delete eliminatedPlayer;
+		if (players.size() <= 1) break;
 		potato.reset();
+		set++;
 	}
+	cout << players.at(0).first << " wins the Match!" << endl;
 	delete players.at(0).second;
-	cout << "umpire finished" << endl;
 }
 
 int Umpire::indexById(unsigned int Id) {
