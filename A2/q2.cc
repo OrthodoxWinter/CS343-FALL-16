@@ -6,15 +6,33 @@
 #include <fstream>
 #include <utility>
 #include <stdlib.h>
+#include <unistd.h>
 
 using namespace std;
 
+void usage(char *argv[]) {
+    cout << "Usage: " << argv[0] << " number-of-players (2 <= and <= 20) [ random-seed (>= 0) ]" << endl;
+    exit( EXIT_FAILURE );
+}
+
 void uMain::main() {
 
-    istream *infile = &cin;                                                             // default input is cin
+    int numPlayers;
+    int intSeed;
+    uint32_t seed = getpid();
 
-    int numPlayers = atoi(argv[1]);
-    uint32_t seed = (uint32_t) atoi(argv[2]);
+    switch (argc) {
+        case 3:
+            intSeed = atoi(argv[2]);
+            if (intSeed < 0) usage(argv);
+            seed = (uint32_t) intSeed;
+        case 2:
+            numPlayers = atoi(argv[1]);
+            if (!(numPlayers >= 2 && numPlayers <= 20)) usage(argv);
+            break;
+        default:
+            usage(argv);
+    }
 
     rng.seed(seed);
     vector<pair<unsigned int, Player*>> players;
@@ -27,6 +45,4 @@ void uMain::main() {
     }
 
     umpire.set(0);
-
-    if ( infile != &cin ) delete infile;                                                // close file if applicable
 }
