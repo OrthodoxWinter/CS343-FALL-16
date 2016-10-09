@@ -1,76 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <sstream>
+#include "q1binsertsort.h"
 
 using namespace std;
-
-template<typename T> _Coroutine Binsertsort {
-    const T Sentinel;            // value denoting end of set
-    T value;                     // communication: value being passed down/up the tree
-    Binsertsort<T> *left;
-    Binsertsort<T> *right;
-    T nodeValue;
-    void main() {
-        cout << "in " << value << endl;
-        left = NULL;
-        right = NULL;
-        nodeValue = value;
-        suspend();
-        if (nodeValue != Sentinel) {
-            Binsertsort<T> leftChild(Sentinel);
-            Binsertsort<T> rightChild(Sentinel);
-            left = &leftChild;
-            right = &rightChild;
-            for (;;) {
-                if (value == Sentinel) { 
-                    cout << "sentinel value" << endl;
-                    break;
-                }
-                Binsertsort<T> *child = value < nodeValue? left : right;
-                cout << "child is " << child << endl;
-                child->sort(value);
-                suspend();
-            }
-
-            left->sort(Sentinel);
-            right->sort(Sentinel);
-
-            suspend();
-
-            for (;;) {
-                value = left->retrieve();
-                if (value != Sentinel) {
-                    suspend();
-                } else {
-                    break;
-                }
-            }
-
-            value = nodeValue;
-            suspend();
-
-            for (;;) {
-                value = right->retrieve();
-                if (value != Sentinel) {
-                    suspend();
-                } else {
-                    break;
-                }
-            }
-        }
-        value = Sentinel;
-        suspend();
-    }
-  public:
-    Binsertsort( T Sentinel ) : Sentinel( Sentinel ) {}
-    void sort( T value ) {       // value to be sorted
-        Binsertsort::value = value;
-        resume();
-    }
-    T retrieve() {               // retrieve sorted value
-        resume();
-        return value;
-    }
-};
 
 // print out the usage of this program and terminate
 void usage( char *argv[] ) {
@@ -81,41 +15,57 @@ void usage( char *argv[] ) {
 
 void uMain::main() {
 
-    istream *infile = &cin;                                                             // default input is cin
+    istream *infile;                                                                    // default input is cin
+    ostream *outfile = &cout;
 
     switch ( argc ) {
-        case 2:                                                                         // input file provided, therefore read from file
+        case 3:                                                                         // input file provided, therefore read from file
+            try {
+                outfile = new ofstream(argv[2]);
+            } catch (uFile::Failure) {
+                cout << "Error! Could not create output file \"" << argv[2] << "\"" << endl;
+            }
+        case 2:
             try {
                 infile = new ifstream(argv[1]);
             } catch (uFile::Failure) {
-                cerr << "Error! Could not open input file \"" << argv[0] << "\"" << endl;
-                usage( argv );
+                cout << "Error! Could not open input file \"" << argv[1] << "\"" << endl;
             }
-            break;
-        case 1:
             break;                                                                      // no input file, use cin
         default:
             usage(argv);                                                                // more than one argument, incorrect usage
     } // switch
 
-    Binsertsort<int> sort(-1);
-    int value;
-    while(cin >> value) {
-        if (value == -1) break;
-        sort.sort(value);
-    }
+    string line;
 
-    sort.sort(-1);
-
-    for (;;) {
-        cout << "retrieve" << endl;
-        int sortedValue = sort.retrieve();
-        cout <<"!!!" << sortedValue << " ";
-        if (sortedValue == -1) {
-            cout << "end";
-            break;
+    while (getline(*infile, line)) {
+        if (line == "") {
+            *outfile << endl << endl;
+            continue;
         }
+        stringstream input(line);
+
+        Binsertsort<int> sort(SENTINEL);
+        int numValue;
+        int value;
+
+        input >> numValue;
+        for (int i = 0; i < numValue; i++) {
+            input >> value;
+            *outfile << value << " ";
+            sort.sort(value);
+        }
+        *outfile << endl;
+
+        sort.sort(SENTINEL);
+
+        for (int i = 0; i < numValue; i++) {
+            int sortedValue = sort.retrieve();
+            *outfile << sortedValue << " ";
+        }
+        *outfile << endl << endl;
     }
 
-    if ( infile != &cin ) delete infile;                                                // close file if applicable
+    delete infile;
+    if (outfile != &cout) delete outfile;
 }
