@@ -6,6 +6,25 @@
 
 using namespace std;
 
+class TwoNumbers {
+  public:
+    int value1;
+    int value2;
+    TwoNumbers(int value1, int value2): value1(value1), value2(value2) {}
+    TwoNumbers() {}
+    bool operator<(const TwoNumbers &c) {
+        if (value1 == c.value1) {
+            return value2 < c.value2;
+        } else {
+            return value1 < c.value1;
+        }
+    }
+
+    bool operator==(const TwoNumbers &c) {
+        return (value1 == c.value1) && (value2 == c.value2);
+    }
+};
+
 // print out the usage of this program and terminate
 void usage( char *argv[] ) {
     cerr << "Usage: " << argv[0]
@@ -40,7 +59,6 @@ void uMain::main() {
 
     while (getline(*infile, line)) {
         if (line == "") {
-            *outfile << endl << endl;
             continue;
         }
         stringstream input(line);

@@ -12,7 +12,7 @@ template<typename T> _Coroutine Binsertsort {
         child->sort(Sentinel);
         for (;;) {
             value = child->retrieve();
-            if (value != Sentinel) {
+            if (!(value == Sentinel)) {
                 suspend();
             } else {
                 return;
@@ -25,7 +25,7 @@ template<typename T> _Coroutine Binsertsort {
         right = NULL;
         nodeValue = value;
         suspend();
-        if (nodeValue != Sentinel) {
+        if (!(nodeValue == Sentinel)) {
             Binsertsort<T> leftChild(Sentinel);
             Binsertsort<T> rightChild(Sentinel);
             left = &leftChild;
