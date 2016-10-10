@@ -14,9 +14,9 @@ class TwoNumbers {
   public:
     int value1;
     int value2;
-    TwoNumbers(int value1, int value2): value1(value1), value2(value2) {}
+    TwoNumbers( int value1, int value2 ): value1( value1 ), value2( value2 ) {}
     TwoNumbers() {}
-    bool operator<(const TwoNumbers &c) {
+    bool operator<( const TwoNumbers &c ) {
         if (value1 == c.value1) {
             return value2 < c.value2;
         } else {
@@ -24,8 +24,8 @@ class TwoNumbers {
         }
     }
 
-    bool operator==(const TwoNumbers &c) {
-        return (value1 == c.value1) && (value2 == c.value2);
+    bool operator==( const TwoNumbers &c ) {
+        return ( value1 == c.value1 ) && ( value2 == c.value2 );
     }
 };
 
@@ -34,18 +34,18 @@ class TwoNumbers {
  * the type TwoNumbers defined above
  */
 void sortTwoNumbers() {
-    TwoNumbers sentinel(-1, -1);                                                        // Sentinel Value
-    Binsertsort<TwoNumbers> sort(sentinel);
-    TwoNumbers one(1, 6);                                                               // Values to sort
-    TwoNumbers two(7, 5);
-    TwoNumbers three(6, 3);
-    TwoNumbers four(6, 6);
-    sort.sort(one);
-    sort.sort(two);
-    sort.sort(three);
-    sort.sort(four);
-    sort.sort(sentinel);
-    for (int i = 0; i < 4; i++) {                                                       // retrieve and print out the sorted values
+    TwoNumbers sentinel( -1, -1 );                                                      // Sentinel Value
+    Binsertsort<TwoNumbers> sort( sentinel );
+    TwoNumbers one( 1, 6 );                                                             // Values to sort
+    TwoNumbers two( 7, 5 );
+    TwoNumbers three( 6, 3 );
+    TwoNumbers four( 6, 6 );
+    sort.sort( one );
+    sort.sort( two );
+    sort.sort( three );
+    sort.sort( four );
+    sort.sort( sentinel );
+    for ( int i = 0; i < 4; i++ ) {                                                     // retrieve and print out the sorted values
         TwoNumbers value = sort.retrieve();
         cout << value.value1 << " " << value.value2 << endl;
     }
@@ -66,17 +66,17 @@ void uMain::main() {
     switch ( argc ) {
         case 3:                                                                         // output file specified, therefore open stream to write to file
             try {
-                outfile = new ofstream(argv[2]);
-            } catch (uFile::Failure) {
+                outfile = new ofstream( argv[2] );
+            } catch ( uFile::Failure ) {
                 cout << "Error! Could not open output file \"" << argv[2] << "\"" << endl;
-                usage(argv);
+                usage( argv );
             } // try
         case 2:                                                                         // open stream to read from input file
             try {
-                infile = new ifstream(argv[1]);
-            } catch (uFile::Failure) {
+                infile = new ifstream( argv[1] );
+            } catch ( uFile::Failure ) {
                 cout << "Error! Could not open input file \"" << argv[1] << "\"" << endl;
-                usage(argv);
+                usage( argv );
             } // try
             break;
         default:
@@ -85,34 +85,34 @@ void uMain::main() {
 
     string line;
 
-    while (getline(*infile, line)) {                                                    // read input file one line at a time
-        if (line == "") {
+    while ( getline( *infile, line ) ) {                                                // read input file one line at a time
+        if ( line == "" ) {
             continue;                                                                   // move on to next line if encountered an empty line
         }
-        stringstream input(line);
+        stringstream input( line );
 
-        Binsertsort<int> sort(SENTINEL);
-        int numValue;                                                                   // number of values to sort on current line
-        int value;
+        Binsertsort<TYPE> sort( SENTINEL );
+        unsigned int numValue;                                                          // number of values to sort on current line
+        TYPE value;
 
         input >> numValue;
-        for (int i = 0; i < numValue; i++) {                                            // read the numbers and sort them
+        for ( unsigned int i = 0; i < numValue; i++ ) {                                 // read the numbers and sort them
             input >> value;
             *outfile << value << " ";
-            sort.sort(value);
+            sort.sort( value );
         }
 
         *outfile << endl;
 
-        sort.sort(SENTINEL);                                                            // send SENTINEL to indicate end of input
+        sort.sort( SENTINEL );                                                          // send SENTINEL to indicate end of input
 
-        for (int i = 0; i < numValue; i++) {                                            // retrieve and print the sorted values
-            int sortedValue = sort.retrieve();
+        for ( unsigned int i = 0; i < numValue; i++ ) {                                 // retrieve and print the sorted values
+            TYPE sortedValue = sort.retrieve();
             *outfile << sortedValue << " ";
         }
         *outfile << endl << endl;
     }
 
     delete infile;                                                                      // release resources
-    if (outfile != &cout) delete outfile;
+    if ( outfile != &cout ) delete outfile;
 }

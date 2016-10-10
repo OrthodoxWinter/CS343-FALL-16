@@ -14,11 +14,11 @@ template<typename T> _Coroutine Binsertsort {
      * Every time a non-Sentinel value is encountered, this function suspends
      * the coroutine
      */
-    void retrieveChild(Binsertsort<T> *child) {
-        child->sort(Sentinel);                                              //signal end of input to child
-        for (;;) {
+    void retrieveChild( Binsertsort<T> *child ) {
+        child->sort( Sentinel );                                              //signal end of input to child
+        for ( ;; ) {
             value = child->retrieve();
-            if (!(value == Sentinel)) {
+            if ( !( value == Sentinel ) ) {
                 suspend();
             } else {
                 return;
@@ -31,28 +31,28 @@ template<typename T> _Coroutine Binsertsort {
         right = NULL;
         nodeValue = value;                                                  // set the node value on first resume
         suspend();
-        if (!(nodeValue == Sentinel)) {                                     // on second resume, check if the node value is Sentinel. If yes, we set value to Sentinel and terminate
-            Binsertsort<T> leftChild(Sentinel);                             //node value is not Sentinel, so we create left and right child, and prepare to read more values
-            Binsertsort<T> rightChild(Sentinel);
+        if ( !( nodeValue == Sentinel ) ) {                                     // on second resume, check if the node value is Sentinel. If yes, we set value to Sentinel and terminate
+            Binsertsort<T> leftChild( Sentinel );                             //node value is not Sentinel, so we create left and right child, and prepare to read more values
+            Binsertsort<T> rightChild( Sentinel );
             left = &leftChild;
             right = &rightChild;
-            for (;;) {                                                      // read values passed in by sort
-                if (value == Sentinel) {                                    //stop when a Sentinel value is encountered
+            for ( ;; ) {                                                      // read values passed in by sort
+                if ( value == Sentinel ) {                                    //stop when a Sentinel value is encountered
                     break;
                 }
                 Binsertsort<T> *child = value < nodeValue? left : right;    // give value to the correct child
-                child->sort(value);
+                child->sort( value );
                 suspend();
             }
 
             suspend();                                                      // this suspend is for the Sentinel value
 
-            retrieveChild(left);                                            // retrieve all values of left child
+            retrieveChild( left );                                            // retrieve all values of left child
 
             value = nodeValue;                                              // retrieve value of the current node
             suspend();
 
-            retrieveChild(right);                                           // retrieve all values of right child
+            retrieveChild( right );                                           // retrieve all values of right child
         }
         value = Sentinel;                                                   // give back Sentinel to indicate the end
     }

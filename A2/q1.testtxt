@@ -1,0 +1,62 @@
+For the first test, I used an input file. Each line in the input file is designed to construct a tree of a particular structure, so that I can test the different parts of Binsertsort. 
+I used the input file as the only argument to my program, and I checked the printed output is correct.
+
+Below is the input file that I used:
+
+line # | line
+1      | 1 7
+2      | 2 5 3
+3      | 2 10 15
+4      | 3 89 4 336
+5      | 6 879 463 109 77 13 4
+6      | 5 3 5 9 48 447
+7      | 9 10 5 15 3 18 4 12 11 2
+8      | 37 668 384 167 985 913 434 433 935 875 683 617 4 52 2293 333 452 887 212 73 700 838 109 897 292 7683 17934 797 324 24 38 30 887 3 83 578 9399 5869
+9      | 14 10 5 4 5 11 18 19 4 13 13 8 20 9 19
+10     | 9 -15 -4 -7 -2 -44 -3 -88 -77 -9
+11     |
+12     | 15 14 -2 4 -3 90 0 81 -4 8 -828 27 99 77 -2 0
+
+And this is the corresponding output:
+
+
+
+line # | Purpose of test                                                                                                    | Test Result
+
+1      | This is the trivial case where here is only 1 value to sort                                                        | The program correctly print out the single value
+
+2      | This is a slightly more complex case where the input constructs a tree with a root value and one left child.       | Program correctly sorts the two values and prints them
+       | This is meant to test a single recursive call to the left                                                          | 
+
+3      | This is a similar test to the one above. The input here forms a tree with root node and a leaf node to its right.  | Program correctly sorts the two values and prints them
+       | This is meant to test a single recursive call to the right                                                         | 
+
+4      | This test is the extension of the previous two, where root node has both a left and right leaf.                    | Program prints the values in sorted order
+       | This is meant to test a single recursive call to the left and a single recursive call to the right                 | 
+
+5      | In this test, the values are in decreasing order, so each node in the tree only has a left child.                  | Program prints the values in sorted order
+       | This is meant to test multiple recursive calls to the left                                                         | 
+
+6      | In this test, the values are already sorted, so each node in the tree only has a right child.                      | Program prints the values in sorted order 
+       | This is meant to test multiple recursive calls to the right                                                        | 
+
+7      | In this test, the values form a tree several levels deep and fills the left and right evenly.                      | Program prints the values in sorted order
+       | This is meant to test that tree construction and traversal is correct                                              | 
+
+8      | The input of this test are several numbers, which forms a (relatively) large tree.                                 | Program prints the values in sorted order
+       | This is meant to be a general test                                                                                 | 
+
+9      | The input of this test has several duplicate values. This is to make sure duplicates are processed correctly       | Program prints the values in sorted order
+
+10     | The purpose of this test is to make sure negative numbers are processed correctly                                  | Program prints the values in sorted order
+
+11     | This is meant to test the case where there's no input. There should be no corresponding line in the output         | No line is printed in the output
+
+12     | This test is to make sure the program works when mixing positive numbers, zero, and negative numbers               | Program prints values in sorted value
+
+For my second test, I used the same input file but specified an output file, and verified the printed output of the previous test matched the content of the output file
+
+For my third test, I ran my program with wrong number of arguments and invalid file names, and verified that the output matched that of the reference solution.
+
+For my final test, I changed the TYPE in the Makefile to string and modified the SENTINEL appropriately. I ran the program using the same input file, and verified that
+the output now sorts the values lexicographically

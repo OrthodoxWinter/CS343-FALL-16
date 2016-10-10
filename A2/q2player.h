@@ -9,14 +9,14 @@ _Coroutine Umpire;
 
 _Coroutine Player {
   public:
-    typedef std::vector< std::pair< unsigned int, Player* > > PlayerList; // container type of your choice
+    typedef std::vector< std::pair< unsigned int, Player* > > PlayerList; // PlayersList is chosen to be a vector of pairs, where the pair is a Player's Id and the Player pointer.
     Player( Umpire &umpire, unsigned int Id, const PlayerList &players );
     void toss( Potato &potato );
   private:
   	Umpire &umpire;
     unsigned int Id;
-	const PlayerList &players;
-	Potato *potato;
+	  const PlayerList &players;
+	  Potato *potato;
     void main();
 };
 
