@@ -19,7 +19,38 @@ line # | line
 
 And this is the corresponding output:
 
+7 
+7 
 
+5 3 
+3 5 
+
+10 15 
+10 15 
+
+89 4 336 
+4 89 336 
+
+879 463 109 77 13 4 
+4 13 77 109 463 879 
+
+3 5 9 48 447 
+3 5 9 48 447 
+
+10 5 15 3 18 4 12 11 2 
+2 3 4 5 10 11 12 15 18 
+
+668 384 167 985 913 434 433 935 875 683 617 4 52 2293 333 452 887 212 73 700 838 109 897 292 7683 17934 797 324 24 38 30 887 3 83 578 9399 5869 
+3 4 24 30 38 52 73 83 109 167 212 292 324 333 384 433 434 452 578 617 668 683 700 797 838 875 887 887 897 913 935 985 2293 5869 7683 9399 17934 
+
+10 5 4 5 11 18 19 4 13 13 8 20 9 19 
+4 4 5 5 8 9 10 11 13 13 18 19 19 20 
+
+-15 -4 -7 -2 -44 -3 -88 -77 -9 
+-88 -77 -44 -15 -9 -7 -4 -3 -2 
+
+14 -2 4 -3 90 0 81 -4 8 -828 27 99 77 -2 0 
+-828 -4 -3 -2 -2 0 0 4 8 14 27 77 81 90 99
 
 line # | Purpose of test                                                                                                    | Test Result
 
@@ -53,6 +84,7 @@ line # | Purpose of test                                                        
 11     | This is meant to test the case where there's no input. There should be no corresponding line in the output         | No line is printed in the output
 
 12     | This test is to make sure the program works when mixing positive numbers, zero, and negative numbers               | Program prints values in sorted value
+
 
 For my second test, I used the same input file but specified an output file, and verified the printed output of the previous test matched the content of the output file
 
