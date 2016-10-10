@@ -1,0 +1,40 @@
+part a:
+
+The 10 outputs of the version without -multi flag are:
+shared:20000000
+shared:16985238
+shared:20000000
+shared:20000000
+shared:20000000
+shared:20000000
+shared:20000000
+shared:20000000
+shared:20000000
+shared:20000000
+
+The 10 outputs of the version with the -multi flag are:
+shared:10828338
+shared:10262028
+shared:10280749
+shared:10638708
+shared:11256479
+shared:10929865
+shared:10973563
+shared:12875737
+shared:12096187
+shared:11458554
+
+part b:
+
+For both version, the 10 runs may not produce the same result. In both cases, the += operator is not atomic, instead it consists of a read operation, add operation, and save operation.
+This means that it's possible in the first task between read and save operation, task two incremented shared. However this is not known to task one, so when it performs its save, 
+it will overrite any progress task two made.
+
+part c:
+The smallest value that could be printed is 2, and the largest value that could be printed is 20000000.
+
+part d:
+In the uniprocessor case, the scenario I described in part b only occurs if there's a context switch between the two tasks during one of the tasks' non-atomic += operation. Presumably that 
+this program is so small that it executes very fast, which means there're probably few context switches between two tasks. This means the chance of one task overriting the work of the other 
+is small, and therefore most of the time the program produces the right result. In the multiple processor case, the two tasks are executing simultaneously. Therefore everytime a task performs a +=
+operation, it risks interfering with the other task. Therefore there are many collisions occuring in the multiple processor case, and as a result its output is smaller compared to the single processor case.
