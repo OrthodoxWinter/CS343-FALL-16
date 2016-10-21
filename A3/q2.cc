@@ -16,14 +16,19 @@ _Task Multiplier {
 	void main() {
 		if (minRow < maxRow) {
 			unsigned int rowToCompute = (minRow + maxRow) / 2;
-			Multiplier A(Z, X, Y, xc, yc, minRow, rowToCompute - 1);
-			Multiplier B(Z, X, Y, xc, yc, rowToCompute + 1, maxRow);
-			computeRow(rowToCompute);
-		} else {
-			if (minRow > maxRow) {
-				throw 1;
+			int rightMin = rowToCompute + 1;
+			int rightMax = maxRow;
+			if (rightMin == 0) {
+				rightMin = 1;
+				rightMax = 0;
 			}
-			computeRow(minRow);
+			Multiplier A(Z, X, Y, xc, yc, minRow, rowToCompute - 1);
+			Multiplier B(Z, X, Y, xc, yc, rightMin, rightMax);
+			computeRow(rowToCompute - 1);
+		} else {
+			if (minRow == maxRow) {
+				computeRow(minRow - 1);
+			}
 		}
 	}
 
@@ -43,13 +48,11 @@ _Task Multiplier {
 
   public:
 
-  	Multiplier(int **Z, int **X, int **Y, unsigned int xc, unsigned int yc, unsigned int minRow, unsigned maxRow): Z(Z), X(X), Y(Y), xc(xc), yc(yc), minRow(minRow), maxRow(maxRow) {
-  		cout << "xc: " << xc << " yc: " << yc << " minRow: " << minRow << " maxRow: " << maxRow << endl;
-  	}
+  	Multiplier(int **Z, int **X, int **Y, unsigned int xc, unsigned int yc, unsigned int minRow, unsigned maxRow): Z(Z), X(X), Y(Y), xc(xc), yc(yc), minRow(minRow), maxRow(maxRow) {}
 };
 
 void matrixmultiply( int *Z[], int *X[], unsigned int xr, unsigned int xc, int *Y[], unsigned int yc ) {
-	Multiplier A(Z, X, Y, xc, yc, 0, xr - 1);
+	Multiplier A(Z, X, Y, xc, yc, 1, xr);
 }
 
 // print out the usage of this program and terminate
@@ -75,7 +78,8 @@ void readMatrix(istream *infile, int *X[], unsigned int rows, unsigned int colum
 
 void printMatrixRow(int *rowVector, unsigned int columns) {
 	for (int i = 0; i < columns; i++) {
-		cout << " " << rowVector[i];
+		cout.width(8);
+		cout << right << rowVector[i] << " ";
 	}
 }
 
@@ -133,11 +137,29 @@ void uMain::main() {
     if ( YInput != &cin ) delete YInput;												// close file if applicable
     if ( XInput != &cin ) delete XInput;
 
-    cout << "start" << endl;
     matrixmultiply(Z, X, xr, xcyr, Y, yc);
-    cout << "end" << endl;
+
+    for (int i = 0; i < xcyr; i++) {
+    	for (int j = 0; j < xcyr; j++) {
+    		cout.width(8);
+    		cout << "" << " ";
+    	}
+    	cout << "   | ";
+    	printMatrixRow(Y[i], yc);
+    	cout << endl;
+    }
+    for (int i = 0; i < xcyr * 9 + 3; i++) {
+    	cout << "-";
+    }
+    cout << "*";
+    for (int i = 0; i < yc * 9 + 1; i++) {
+    	cout << "-";
+    }
+    cout << endl;
 
     for (int i = 0; i < xr; i++) {
+    	printMatrixRow(X[i], xcyr);
+    	cout << "   | ";
     	printMatrixRow(Z[i], yc);
     	cout << endl;
     }
