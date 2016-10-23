@@ -4,43 +4,66 @@ using namespace std;
 
 // volatile prevents dead-code removal
 void do_work( int C1, int C2, int C3, int L1, int L2, volatile int L3 ) {
-    bool endL1, endL2, endL3;
-    while ( int i = 0; i < L1; i += 1 ) {
+    bool doL1 = true, doL2 = true, doL3 = true;
+    int i = 0, j = 0, k = 0;
+    bool s7 = true, s8 = true;
+    if (L1 == 0) doL1 = false;
+    if (L2 == 0) doL2 = false;
+    if (L3 == 0) doL3 = false;
+    while ( doL1 ) {
 #ifndef NOOUTPUT
         cout << "S1 i:" << i << endl;
 #endif
-        for ( int j = 0; j < L2; j += 1 ) {
+        while ( doL2 ) {
 #ifndef NOOUTPUT
             cout << "S2 i:" << i << " j:" << j << endl;
 #endif
-            for ( int k = 0; k < L3; k += 1 ) {
+            while ( doL3 ) {
 #ifndef NOOUTPUT
                 cout << "S3 i:" << i << " j:" << j << " k:" << k << " : ";
 #endif
-      if ( C1 ) goto EXIT1;
+                if ( C1 ) {
+                    doL3 = false;
+                    doL2 = false;
+                    doL1 = false;
+                    s7 = false;
+                    s8 = false; 
+                } else {
 #ifndef NOOUTPUT
-                cout << "S4 i:" << i << " j:" << j << " k:" << k << " : ";
+                    cout << "S4 i:" << i << " j:" << j << " k:" << k << " : ";
 #endif
-          if ( C2 ) goto EXIT2;
+                    if ( C2 ) {
+                        doL2 = false;
+                        doL3 = false;
+                        s7 = false;
+                    } else {
 #ifndef NOOUTPUT
-                cout << "S5 i:" << i << " j:" << j << " k:" << k << " : ";
+                        cout << "S5 i:" << i << " j:" << j << " k:" << k << " : ";
 #endif
-              if ( C3 ) goto EXIT3;
+                        if ( C3 ) {
+                            doL3 = false;
+                        } else {
 #ifndef NOOUTPUT
-                cout << "S6 i:" << i << " j:" << j << " k:" << k << " : ";
+                            cout << "S6 i:" << i << " j:" << j << " k:" << k << " : ";
 #endif
+                        }
+                    }
+                }
+                k++;
+                if (k == L3) doL3 = false;
             } // for
-          EXIT3:;
 #ifndef NOOUTPUT
-            cout << "S7 i:" << i << " j:" << j << endl;
+            if (s7) cout << "S7 i:" << i << " j:" << j << endl;
 #endif
+            j++;
+            if (j == L2) doL2 = false;
         } // for
-      EXIT2:;
 #ifndef NOOUTPUT
-        cout << "S8 i:" << i << endl;
+        if (s8) cout << "S8 i:" << i << endl;
 #endif
+        i++;
+        if (i == L1) doL1 = false;
     } // for
-  EXIT1:;
 } // do_work
 
 int main( int argc, char *argv[] ) {
