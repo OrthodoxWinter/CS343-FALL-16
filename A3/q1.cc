@@ -4,20 +4,26 @@ using namespace std;
 
 // volatile prevents dead-code removal
 void do_work( int C1, int C2, int C3, int L1, int L2, volatile int L3 ) {
-    bool doL1 = true, doL2 = true, doL3 = true;
-    int i = 0, j = 0, k = 0;
+    bool doL1, doL2, doL3;
+    int i, j, k;
     bool s7 = true, s8 = true;
+    doL1 = true;
     if (L1 == 0) doL1 = false;
-    if (L2 == 0) doL2 = false;
-    if (L3 == 0) doL3 = false;
+    i = 0;
     while ( doL1 ) {
 #ifndef NOOUTPUT
         cout << "S1 i:" << i << endl;
 #endif
+        doL2 = true;
+        if (L2 == 0) doL2 = false;
+        j = 0;
         while ( doL2 ) {
 #ifndef NOOUTPUT
             cout << "S2 i:" << i << " j:" << j << endl;
 #endif
+            doL3 = true;
+            if (L3 == 0) doL3 = false;
+            k = 0;
             while ( doL3 ) {
 #ifndef NOOUTPUT
                 cout << "S3 i:" << i << " j:" << j << " k:" << k << " : ";
