@@ -6,10 +6,11 @@ using namespace std;
 void do_work( int C1, int C2, int C3, int L1, int L2, volatile int L3 ) {
     bool doL1, doL2, doL3;
     int i, j, k;
-    bool s7 = true, s8 = true;
+    bool s7, s8;
     doL1 = true;
     if (L1 == 0) doL1 = false;
     i = 0;
+    s8 = true;
     while ( doL1 ) {
 #ifndef NOOUTPUT
         cout << "S1 i:" << i << endl;
@@ -17,6 +18,7 @@ void do_work( int C1, int C2, int C3, int L1, int L2, volatile int L3 ) {
         doL2 = true;
         if (L2 == 0) doL2 = false;
         j = 0;
+        s7 = true;
         while ( doL2 ) {
 #ifndef NOOUTPUT
             cout << "S2 i:" << i << " j:" << j << endl;
