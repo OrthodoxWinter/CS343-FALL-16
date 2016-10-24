@@ -12,14 +12,18 @@ template<typename T> class BoundedBuffer {
 	uCondLock notFull;
 
 #ifdef NOBUSY
-    bool preventBarge;
-    uCondLock barge;
+    bool preventInsertBarge;
+    uCondLock insertBarge;
+
+    bool preventRemoveBarge;
+    uCondLock removeBarge;
 #endif
 
   public:
     BoundedBuffer( const unsigned int size = 10 ): size(size) {
 #ifdef NOBUSY
-        preventBarge = false;
+        preventInsertBarge = false;
+        preventRemoveBarge = false;
 #endif
     }
 
@@ -48,39 +52,57 @@ template<typename T> class BoundedBuffer {
     }
 #endif
 
-#ifdef NOBOSU
+#ifdef NOBUSY
     void insert( T elem ) {
         lock.acquire();
-        if (preventBarge) {
-            barge.wait(lock);
+        if (preventInsertBarge) {
+            insertBarge.wait(lock);
+            preventInsertBarge = false;
         }
         if (buffer.size() == size) {
             notFull.wait(lock);
+            preventInsertBarge = false;
         }
         assert(buffer.size() < size);
         buffer.push_back(elem);
         if (!notEmpty.empty()) {
-            preventBarge = true;
+            preventRemoveBarge = true;
             notEmpty.signal();
         } else {
-            if (!barge.empty()) {
-                preventBarge = true;
-                barge.signal();
+            if (!removeBarge.empty()) {
+                preventRemoveBarge = true;
+                removeBarge.signal();
             } else {
-                preventBarge = false;
+                preventRemoveBarge = false;
             }
         }
         lock.release();
     }
+
     T remove() {
         lock.acquire();
+        if (preventRemoveBarge) {
+            removeBarge.wait(lock);
+            preventRemoveBarge = false;
+        }
         if (buffer.size() == 0) {
             notEmpty.wait(lock);
+            preventRemoveBarge = false;
         }
         assert(buffer.size() > 0);
         T elem = buffer.front();
         buffer.pop_front();
-        notFull.signal();
+        if (!notFull().empty()) {
+            preventInsertBarge = true;
+            notFull.signal();
+        } else {
+            if (!insertBarge.empty()) {
+                preventInsertBarge = true;
+                insertBarge.signal();
+            } else {
+                preventInsertBarge = false;
+            }
+        }
         lock.release();
         return elem;
     }
