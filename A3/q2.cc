@@ -1,55 +1,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
+#include "q2multiplier.h"
 
 using namespace std;
-
-_Task Multiplier {
-	int **Z;
-	int **X;
-	int **Y;
-	unsigned int xc;
-	unsigned int yc;
-	unsigned int minRow;
-	unsigned int maxRow;
-
-	void main() {
-		if (minRow < maxRow) {
-			unsigned int rowToCompute = (minRow + maxRow) / 2;
-			int rightMin = rowToCompute + 1;
-			int rightMax = maxRow;
-			if (rightMin == 0) {
-				rightMin = 1;
-				rightMax = 0;
-			}
-			Multiplier A(Z, X, Y, xc, yc, minRow, rowToCompute - 1);
-			Multiplier B(Z, X, Y, xc, yc, rightMin, rightMax);
-			computeRow(rowToCompute - 1);
-		} else {
-			if (minRow == maxRow) {
-				computeRow(minRow - 1);
-			}
-		}
-	}
-
-	void computeRow(unsigned int rowToCompute) {
-		for (int i = 0; i < yc; i++) {
-			Z[rowToCompute][i] = multiplyXRowYColumn(X, Y, rowToCompute, i, xc);
-		}
-	}
-
-	int multiplyXRowYColumn(int **X, int **Y, unsigned int xr, unsigned int yc, unsigned int dimension) {
-		int sum = 0;
-		for (int i = 0; i < dimension; i++) {
-			sum += X[xr][i] * Y[i][yc];
-		}
-		return sum;
-	}
-
-  public:
-
-  	Multiplier(int **Z, int **X, int **Y, unsigned int xc, unsigned int yc, unsigned int minRow, unsigned maxRow): Z(Z), X(X), Y(Y), xc(xc), yc(yc), minRow(minRow), maxRow(maxRow) {}
-};
 
 void matrixmultiply( int *Z[], int *X[], unsigned int xr, unsigned int xc, int *Y[], unsigned int yc ) {
 	Multiplier A(Z, X, Y, xc, yc, 1, xr);
@@ -63,28 +17,28 @@ void usage( char *argv[] ) {
 }
 
 void allocateMatrix(int *X[], unsigned int rows, unsigned int columns) {
-	for (int i = 0; i < rows; i++) {
+	for (unsigned int i = 0; i < rows; i++) {
 		X[i] = new int[columns];
 	}
 }
 
 void readMatrix(istream *infile, int *X[], unsigned int rows, unsigned int columns) {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
+	for (unsigned int i = 0; i < rows; i++) {
+		for (unsigned int j = 0; j < columns; j++) {
 			*infile >> X[i][j];
 		}
 	}
 }
 
 void printMatrixRow(int *rowVector, unsigned int columns) {
-	for (int i = 0; i < columns; i++) {
+	for (unsigned int i = 0; i < columns; i++) {
 		cout.width(8);
 		cout << right << rowVector[i] << " ";
 	}
 }
 
 void freeMatrix(int *X[], unsigned int rows) {
-	for (int i = 0; i < rows; i++) {
+	for (unsigned int i = 0; i < rows; i++) {
 		delete[] X[i];
 	}
 }
@@ -123,6 +77,8 @@ void uMain::main() {
 			usage(argv);																// more than one argument, incorrect usage
     } // switch
 
+    //uProcessor p[xr - 1] __attribute__ (( unused ));
+
     int *Z[xr];
     int *X[xr];
     int *Y[xcyr];
@@ -139,8 +95,8 @@ void uMain::main() {
 
     matrixmultiply(Z, X, xr, xcyr, Y, yc);
 
-    for (int i = 0; i < xcyr; i++) {
-    	for (int j = 0; j < xcyr; j++) {
+    for (unsigned int i = 0; i < xcyr; i++) {
+    	for (unsigned int j = 0; j < xcyr; j++) {
     		cout.width(8);
     		cout << "" << " ";
     	}
@@ -148,16 +104,16 @@ void uMain::main() {
     	printMatrixRow(Y[i], yc);
     	cout << endl;
     }
-    for (int i = 0; i < xcyr * 9 + 3; i++) {
+    for (unsigned int i = 0; i < xcyr * 9 + 3; i++) {
     	cout << "-";
     }
     cout << "*";
-    for (int i = 0; i < yc * 9 + 1; i++) {
+    for (unsigned int i = 0; i < yc * 9 + 1; i++) {
     	cout << "-";
     }
     cout << endl;
 
-    for (int i = 0; i < xr; i++) {
+    for (unsigned int i = 0; i < xr; i++) {
     	printMatrixRow(X[i], xcyr);
     	cout << "   | ";
     	printMatrixRow(Z[i], yc);
