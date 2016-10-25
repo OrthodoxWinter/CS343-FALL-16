@@ -1,9 +1,7 @@
 #!/bin/bash
-#make clean
 given=matrixmultiply
 solution=q2soln
-#make "$given"
-#make "$solution"
+make "$given"
 
 for (( i=1; i <= $1; ++i ))
 do
