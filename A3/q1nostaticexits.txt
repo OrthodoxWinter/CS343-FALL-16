@@ -1,0 +1,10 @@
+I used 1000 200 200 200 as my 4 command line arguments
+Without optimization, the original solution took 16.337 seconds, and the transformed solution took 17.486
+
+With -O2 optimization, the original solution took 3.268 seconds, and the transformed solution took 3.392
+
+The transformed solution is roughly 1.15 seconds slower than the original, which is about a 7% difference. The reason for the difference in performance is because
+the transformed solution required more lines of code to manipulate flag variables to emulate the behavior of the orignal. This means with each loop iteration the 
+transformed solution has to execute more operations on average, which makes it slower.
+
+With optimization, the transformed code is 0.124 seconds slower, which is around 4% difference

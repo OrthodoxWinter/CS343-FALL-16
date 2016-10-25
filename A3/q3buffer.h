@@ -54,7 +54,7 @@ template<typename T> class BoundedBuffer {
         if (preventBarge) {         // check if barging is being prevented. If so, then every newly arriving insert must wait.
             barge.wait(lock);
             if (barge.empty()) {
-                preventBarge = false;
+                preventBarge = false; // need to allow barging, because otherwise all future operations will wait on barge with nobody waking them up
             }
         }
         if (buffer.size() == size) {
@@ -64,14 +64,14 @@ template<typename T> class BoundedBuffer {
         assert(buffer.size() < size);
         buffer.push_back(elem);
         if (!notEmpty.empty()) {
-            preventBarge = true;
+            preventBarge = true; //prevent barging, so that other remove can't barge in before the signaled one, which would violate the assert
             notEmpty.signal();
         } else {
             if (!barge.empty()) {
-                preventBarge = true;
+                preventBarge = true; //prevent barging. Otherwise this could cause multiple insert/remove to be signalled. In that scenario, it's possible for one insert/remove to run and allow barge before the rest wake up.
                 barge.signal();
             } else {
-                preventBarge = false;
+                preventBarge = false; // need to allow barging, because otherwise all future operations will wait on barge with nobody waking them up
             }
         }
         lock.release();

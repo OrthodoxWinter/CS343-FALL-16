@@ -1,5 +1,5 @@
 SENTINEL:=-1
-KIND:=NOBUSY
+KIND:=BUSY
 OPT:= # -multi -O2
 
 CXX = u++					# compiler

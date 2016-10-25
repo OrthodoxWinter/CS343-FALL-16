@@ -1,7 +1,7 @@
 #!/bin/bash
 #make clean
-given=q1soln
-solution=q1
+given=nostaticexits
+solution=staticexits
 #make "$given"
 #make "$solution"
 

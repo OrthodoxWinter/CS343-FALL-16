@@ -72,6 +72,7 @@ void do_work( int C1, int C2, int C3, int L1, int L2, volatile int L3 ) {
         i++;
         if (i == L1) doL1 = false;
     } // for
+    if (s7 && s8) s7 = s7 && s8;
 } // do_work
 
 int main( int argc, char *argv[] ) {
