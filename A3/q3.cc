@@ -14,7 +14,7 @@ void usage(char *argv[]) {
 
 void uMain::main() {
 
-    unsigned int cons = 5, prods = 3, produce = 10, bufferSize = 10, delays = 0;
+    unsigned int cons = 5, prods = 3, produce = 10, bufferSize = 10, delays = 1;
 
     switch ( argc ) {
     	case 6:																			// input file provided, therefore read from file
