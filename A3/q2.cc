@@ -8,14 +8,14 @@ using namespace std;
 /*
  * Given a xr by xc matrix X and xc by yc matrix Y, multiple the 2 and store the result in Z
  */
-void matrixmultiply( int *Z[], int *X[], unsigned int xr, unsigned int xc, int *Y[], unsigned int yc ) {
+void matrixmultiply(int *Z[], int *X[], unsigned int xr, unsigned int xc, int *Y[], unsigned int yc) {
 	Multiplier A(Z, X, Y, xc, yc, 1, xr);
 }
 
 /* 
  * print out the usage of this program and terminate
  */
-void usage( char *argv[] ) {
+void usage(char *argv[]) {
     cout << "Usage: " << argv[0]
 	 << " xrows (> 0)  xycols (> 0)  ycols (> 0)  [ x-matrix-file  y-matrix-file ]" << endl;
     exit( EXIT_SUCCESS );

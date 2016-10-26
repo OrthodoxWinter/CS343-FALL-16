@@ -1,0 +1,55 @@
+i.
+No optimization
+
+busy version:
+time ./buffer 50 55 20000 30 10
+real	0m2.179s
+user	0m2.168s
+sys		0m0.012s
+
+non-busy version:
+time ./buffer 50 55 20000 30 10
+real	0m2.861s
+user	0m2.836s
+sys		0m0.024s
+
+-O2
+
+busy version:
+time ./buffer 50 55 20000 30 10
+real	0m1.853s
+user	0m1.844s
+sys		0m0.004s
+
+non-busy version:
+time ./buffer 50 55 20000 30 10
+real	0m2.499s
+user	0m2.480s
+sys		0m0.020s
+
+ii.
+without optimization, the non-busy version is 0.668 seconds, or 30% slower. With optimization, the busy version is 0.636, or 34% slower.
+
+iii.
+It seems that the overhead introduced with having an additional condition lock, which includes spin locks and sechduling, is more than the inefficiency of busy waiting.
+
+iv.
+No optimization
+
+busy version:
+time ./buffer 50 55 20000 30 10
+real	0m7.485s
+user	0m29.556s
+sys		0m0.236s
+
+non-busy version:
+time ./buffer 50 55 20000 30 10
+real	0m9.206s
+user	0m36.428s
+sys		0m0.200s
+
+v.
+The multiprocessor versions are around 13 times slower than the uniprocessor counterparts.
+
+vi.
+My guess for the cause of the slow down is that the busy wait that occurs in each uCondLock and uOwnerLock is adding up over the 4 cores. Since the actions of the producers and consumers are so simple, they call insert and remove repeatedly very quickly, which causes a lot of contension for these mutex/synchronization construct, which means spending significant time spin locking and wasting cpu time.

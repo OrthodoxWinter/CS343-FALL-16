@@ -7,9 +7,9 @@
 using namespace std;
 
 void usage(char *argv[]) {
-    cerr << "Usage: " << argv[0]
-     << " [infile-file]" << endl;
-    exit( EXIT_FAILURE );
+    cout << "Usage: " << argv[0]
+     << " [ Cons (> 0) [ Prods (> 0) [ Produce (> 0) [ BufferSize (> 0) [ Delay (> 0) ] ] ] ] ]" << endl;
+    exit( EXIT_SUCCESS );
 }
 
 void uMain::main() {
@@ -33,9 +33,16 @@ void uMain::main() {
         default:
 			usage(argv);																// more than one argument, incorrect usage
     } // switch
+    if (delays <= 0 || bufferSize <= 0 || produce <= 0 || prods <= 0 || cons <= 0) {
+        usage(argv);
+    }
     if (argc < 6) {
         delays = prods + cons;
     }
+
+#ifdef __U_MULTI__
+    uProcessor p[3] __attribute__ (( unused ));
+#endif
 
     BoundedBuffer<int> buffer(bufferSize);
     Producer *producers[prods];

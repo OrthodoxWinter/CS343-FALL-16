@@ -1,0 +1,34 @@
+i
+
+---------------------------------------
+time ./matrixmultiply 1 5000 10000
+real	0m2.273s
+user	0m2.110s
+sys		0m0.168s
+---------------------------------------
+time ./matrixmultiply 2 5000 10000
+real	0m3.116s
+user	0m4.577s
+sys		0m0.252s
+---------------------------------------
+time ./matrixmultiply 4 5000 10000
+real	0m3.732s
+user	0m11.633s
+sys		0m0.383s
+---------------------------------------
+time ./matrixmultiply 8 5000 10000
+real	0m4.021s
+user	0m24.238s
+sys		0m0.761s
+---------------------------------------
+time ./matrixmultiply 16 5000 10000
+real	0m5.795s
+user	1m5.739s
+sys		0m1.448s
+---------------------------------------
+
+ii
+
+User time seem to a little more than double everytime we double the number of rows. This makes sense because everytime we double the rows, the number of computations we do also doubles. 
+When we take into consideration that there's an overhead for using multiple cores, the slightly above linear scaling of user time makes sense. Real time, on the other hand, increase very little as we 
+double the number of rows. It scales much better than linear, as a 16x increase in rows only yielded a 2x increase in real time. This shows that the workload is being distributed and parallelized over the different cores. The fact that real time grows despite the fact that there are more than enough cores on the machine show that there's an overhead to using multiple cores.

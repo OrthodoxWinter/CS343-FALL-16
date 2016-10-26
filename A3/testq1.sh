@@ -2,8 +2,8 @@
 #make clean
 given=nostaticexits
 solution=staticexits
-#make "$given"
-#make "$solution"
+make "$given"
+make "$solution"
 
 for (( i=1; i <= $1; ++i ))
 do
