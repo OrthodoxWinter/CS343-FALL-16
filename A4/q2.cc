@@ -7,12 +7,34 @@
 
 using namespace std;
 
+void usage(char *argv[]) {
+    cout << "Usage: " << argv[0]
+     << " Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)" << endl;
+    exit( EXIT_FAILURE );
+}
+
 void uMain::main() {
-	unsigned int numVoters, groupSize, seed;
-	numVoters = atoi(argv[1]);
-	groupSize = atoi(argv[2]);
-	seed = atoi(argv[3]);
-	rng.set_seed(seed);
+	unsigned int numVoters = 6, groupSize = 3;
+	int seed;
+	switch (argc) {
+		case 4:
+			seed = atoi(argv[3]);
+			if (seed < 0) {
+				usage(argv);
+			}
+			rng.set_seed((unsigned int) seed);
+		case 3:
+			groupSize = atoi(argv[2]);
+		case 2:
+			numVoters = atoi(argv[1]);
+		case 1:
+			break;
+		default:
+			usage(argv);
+	}
+	if (!(numVoters > 0 && groupSize > 0 && (numVoters % groupSize) == 0 && (groupSize % 2) == 1)) {
+		usage(argv);
+	}
 	Printer printer(numVoters);
 	TallyVotes tallier(groupSize, printer);
 	Voter **voters = new Voter*[numVoters];
