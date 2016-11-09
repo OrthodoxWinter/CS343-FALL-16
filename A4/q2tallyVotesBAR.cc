@@ -3,29 +3,29 @@
 #include "q2voter.h"
 #include <cassert>
 
-TallyVotes::TallyVotes( unsigned int group, Printer &printer ) : uBarrier(group), count(0), groupSize(group), printer(printer) {}
+TallyVotes::TallyVotes( unsigned int group, Printer &printer ) : uBarrier(group), count(0), voteCount(0), groupSize(group), printer(printer) {}
 
 TallyVotes::Tour TallyVotes::vote( unsigned int id, Tour ballot ) {
-	unsigned int thisCount = count;
-	unsigned int group = thisCount / groupSize;
-	count++;
-	if (votes.size() < (group + 1)) {
-		votes.push_back(0);
-	}
-	if (ballot == Picture) {
-		votes[group] += 1;
+	count++;															// new voter
+	assert(count <= groupSize);
+	if (ballot == Picture) {											// tally vote
+		voteCount++;
 	} else {
-		votes[group] -= 1;
+		voteCount--;
 	}
-	printer.print(id, Voter::States::Vote, ballot);
-	if (((thisCount + 1) % groupSize) != 0) printer.print(id, Voter::States::Block, waiters() + 1);
-	block();
-	if (((thisCount + 1) % groupSize) == 0) {
-		printer.print(id, Voter::States::Complete);
-	} else {
+	printer.print(id, Voter::States::Vote, ballot);	
+	if (count < groupSize) {
+		printer.print(id, Voter::States::Block, waiters() + 1);
+		block();														// block and print message if not enough people to from group yet
 		printer.print(id, Voter::States::Unblock, waiters());
+	} else {
+		pictureTour = voteCount > 0;									// group has been formed, get result and reset internal states
+		printer.print(id, Voter::States::Complete);
+		voteCount = 0;
+		count = 0;
+		block();
 	}
-	if (votes[group] > 0) {
+	if (pictureTour) {
 		return Picture;
 	} else {
 		return Statue;

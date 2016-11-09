@@ -10,10 +10,10 @@ _Monitor Printer;
 #if defined( IMPLTYPE_MC )            // mutex/condition solution
 // includes for this kind of vote-tallier
 class TallyVotes {
-	uCondLock entryQueue, voteQueue, bargeQueue;
+	uCondLock voteQueue, bargeQueue;
 	uOwnerLock lock;
-	unsigned int count, voted, resultRead;
-	bool noBarge;
+	unsigned int count;
+	bool noBarge, pictureTour;
 	unsigned int pictureVotes, statueVotes;
     // private declarations for this kind of vote-tallier
 #elif defined( IMPLTYPE_SEM )         // semaphore solution
@@ -28,7 +28,8 @@ class TallyVotes {
 _Cormonitor TallyVotes : public uBarrier {
 // private declarations for this kind of vote-tallier
 	unsigned int count;
-	std::vector<int> votes;
+	int voteCount;
+	bool pictureTour;
 #else
 	#error unsupported voter type
 #endif

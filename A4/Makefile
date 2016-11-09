@@ -1,5 +1,5 @@
-KIND:=STACK
-TYPE:=MC
+KIND:=VECTOR1
+TYPE:=SEM
 
 CXX = u++					# compiler
 CXXFLAGS = -g -multi -Wall -Wno-unused-label -MMD -O2 -DIMPLKIND_${KIND} -DIMPLTYPE_${TYPE}

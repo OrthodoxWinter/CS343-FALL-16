@@ -5,9 +5,9 @@
 
 TallyVotes::Tour TallyVotes::vote( unsigned int id, Tour ballot ) {
 	Tour result;
-	entrySem.P();
-	lock.P();
-	if (ballot == Picture) {
+	entrySem.P();														// allow groupSize voters in at a time
+	lock.P();															// acquire mutex lock for modifying state
+	if (ballot == Picture) {											// cast vote
 		pictureVotes++;
 	} else {
 		statueVotes++;
@@ -15,23 +15,23 @@ TallyVotes::Tour TallyVotes::vote( unsigned int id, Tour ballot ) {
 	printer.print(id, Voter::States::Vote, ballot);
 	voted++;
 	assert(voted <= groupSize);
-	if (voted == groupSize) {
+	if (voted == groupSize) {											// if enough people voted to form group, then waking up all those blocked
 		assert(voteSem.counter() == (int) (-1 * (groupSize - 1)));
 		printer.print(id, Voter::States::Complete);
 		voteSem.V(groupSize - 1);
 	} else {
-		printer.print(id, Voter::States::Block, voted);
+		printer.print(id, Voter::States::Block, voted);					// if still need more people to form group, then wait
 		voteSem.P(lock);
-		lock.P();
+		lock.P();														// reacquire mutex lock on wake up
 		printer.print(id, Voter::States::Unblock, voted - 1);
 	}
 	result = pictureVotes > statueVotes ? Picture : Statue;
 	voted--;
 	assert(voted >= 0);
-	if (voted == 0) {
+	if (voted == 0) {													// reset variables when you're the last person from the group to read the vote
 		pictureVotes = 0;
 		statueVotes = 0;
-		entrySem.V(groupSize);
+		entrySem.V(groupSize);											// current group finished, so let more voters in
 	}
 	lock.V();
 	return result;
