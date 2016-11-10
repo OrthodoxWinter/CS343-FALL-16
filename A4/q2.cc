@@ -15,8 +15,8 @@ void usage(char *argv[]) {
 
 void uMain::main() {
 	unsigned int numVoters = 6, groupSize = 3;
-	int seed;
-	switch (argc) {
+	int seed, intGroup, intVote;
+	switch (argc) {																							// read input parameters
 		case 4:
 			seed = atoi(argv[3]);
 			if (seed < 0) {
@@ -24,26 +24,34 @@ void uMain::main() {
 			}
 			rng.set_seed((unsigned int) seed);
 		case 3:
-			groupSize = atoi(argv[2]);
+			intGroup = atoi(argv[2]);
+			if (intGroup < 0) {
+				usage(argv);
+			}
+			groupSize = intGroup;
 		case 2:
-			numVoters = atoi(argv[1]);
+			intVote = atoi(argv[1]);
+			if (intVote < 0) {
+				usage(argv);
+			}
+			numVoters = intVote;
 		case 1:
 			break;
 		default:
 			usage(argv);
 	}
-	if (!(numVoters > 0 && groupSize > 0 && (numVoters % groupSize) == 0 && (groupSize % 2) == 1)) {
+	if (!((numVoters % groupSize) == 0 && (groupSize % 2) == 1)) {		// check input is valid
 		usage(argv);
 	}
-	Printer printer(numVoters);
+	Printer printer(numVoters);																				// initialize objects
 	TallyVotes tallier(groupSize, printer);
 	Voter **voters = new Voter*[numVoters];
 	for (unsigned int i = 0; i < numVoters; i++) {
-		voters[i] = new Voter(i, tallier, printer);
+		voters[i] = new Voter(i, tallier, printer);															// create voters
 	}
 	for (unsigned int i = 0; i < numVoters; i++) {
 		delete voters[i];
-	}
+	}																										// delete voters
 	cout << "=================" << endl;
 	cout << "All tours started" << endl;
 	delete[] voters;

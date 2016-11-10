@@ -1,0 +1,88 @@
+No preprocessor
+
+./new 1 100000000
+real	0m6.963s
+user	0m6.940s
+sys		0m0.056s
+
+./new 2 100000000
+real	0m7.365s
+user	0m14.572s
+sys		0m0.172s
+
+./new 4 100000000
+real	0m7.598s
+user	0m29.556s
+sys		0m0.196s
+
+DARRAY
+
+./new 1 100000000
+real	0m9.859s
+user	0m9.808s
+sys		0m0.096s
+
+./new 2 100000000
+real	0m47.443s
+user	1m33.632s
+sys		0m1.100s
+
+./new 4 100000000
+real	2m1.094s
+user	7m59.372s
+sys		0m2.924s
+
+
+VECTOR1
+
+./new 1 100000000
+real	0m14.904s
+user	0m14.740s
+sys		0m0.228s
+
+./new 2 100000000
+real	0m49.900s
+user	1m38.924s
+sys		0m1.132s
+
+./new 4 100000000
+real	2m5.913s
+user	8m14.452s
+sys		0m3.768s
+
+VECTOR 2
+
+./new 1 100000000
+real	1m7.525s
+user	1m6.880s
+sys		0m0.952s
+
+./new 2 100000000
+real	4m13.269s
+user	8m21.488s
+sys		0m6.096s
+
+./new 4 100000000
+real	8m18.784s
+user	32m52.852s
+sys		0m12.220s
+
+When there's no preprocessor variable, the user time scales roughly linearly and real time remains roughly constant. This makes sense because in this implementation the extra
+storage in allocated on the stack, so the space required is known statically. In addition, the tasks run completely independently, so it makes sense that run time scales like 
+this with more tasks.
+
+When compiled with DARRAY, the user time increased by 9 times when going from 1 to 2 tasks, and increased by more than 5 times when going from 2 to 4 task. Real time increased 
+by 5 times when going from 1 task to 2, and increased by more than 2 times when going from 2 to 4 tasks. Clearly the running time is scaling sublinearly, and I think the reason
+is because of the allocation of array on the heap. I would imagine that dynamic memory allocation can't be done currently, and so when one task is waiting for memory allocation, 
+the other tasks must wait. When there're multiple tasks, this busy waiting gets manifested and compounded, which is why this scaling behaviour occurs.
+
+When compiled with Vector1, the performance characteristics is almost identical to that of DARRAY. This make sense given it's using a vector with initial size specified. I believe when created
+this way, vectors allocate an array with the specified size on the heap. So in essence, what is happenning is almost identical to the DARRAY case, which yields similar timing.
+
+When compiled with Vector2, the user time increased by 8 times when going from 1 to 2 tasks, and increased by 4 times when going from 2 to 4 tasks. The real time increased by 4 times when
+going from 1 to 2 tasks and by 2 times when going from 2 to 4 tasks. So this implementation also scales somewhat similarily to the DARRAY case. I believe that the reason is also the dynamic allocation.
+In this case, not only is there a upfront cost of initializing some default sized array when creating a vector, there's also the cost of resizing when array runs out. During both of these operations
+other tasks are likely busy waiting, which is what causes the poor scaling
+
+Stack array implemenration performs the best. Its single task user time beats out the DARRAY implementation by almost a second. It seems having static knowledge of how much space to allocate provide an advantage in running time, This might be due to certain compiler optimization or how the OS allocates stack space. Vector1 is several seconds behind DARRAY in the single task case. This seem to just be 
+the overhead of using a vector type. Finally, Vector2 is significantly slower than every other implementation. I believe this is because the cost of having to resize the vector, which is additional allocation and copying.
