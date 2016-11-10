@@ -10,6 +10,8 @@ Tests
 8. Testing a larger case with voters=20 and group=5 and verify output make sense. Specifically, checking block/unblock message are resonable and voting result is correct. Tested for each implementation
 9. Repeat test 8 with a different seed
 10. Testing invalid input with seed < 0
+11. Testing with no arguments gives 6 voters and 3 group size
+12. testing with only voters
 
 Output
 
@@ -778,3 +780,88 @@ F p     ...     ...     ...     ...     ...     ...     ...     ...     ...     
 ...     ...     ...     ...     F p     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
 =================
 All tours started
+
+10.
+
+./vote 5 1 -1
+
+Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)
+
+11.
+
+./vote
+
+Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  
+======= ======= ======= ======= ======= ======= 
+                S       S               S       
+                V s                             
+                B 1     V s                     
+                        B 2             V p     
+                        U 1             C       
+...     ...     ...     ...     ...     F s     
+                U 0                             
+...     ...     ...     F s     ...     ...     
+                                                
+...     ...     F s     ...     ...     ...     
+                                S               
+                                V s             
+S                               B 1             
+V s                                             
+B 2     S                                       
+        V p                                     
+U 1     C                                       
+...     F s     ...     ...     ...     ...     
+                                U 0             
+F s     ...     ...     ...     ...     ...     
+                                                
+...     ...     ...     ...     F s     ...     
+=================
+All tours started
+
+12.
+
+./vote 12
+
+Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  Voter6  Voter7  Voter8  Voter9  Voter10 Voter11 
+======= ======= ======= ======= ======= ======= ======= ======= ======= ======= ======= ======= 
+                S                                       S                                       
+                V s                                                                             
+                B 1                                     V p                                     
+        S                                               B 2                                     
+        V s                                                                                     
+        C                                               U 1                                     
+...     F s     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+                U 0                                             S                               
+...     ...     ...     ...     ...     ...     ...     F s     ...     ...     ...     ...     
+                                        S                       V p                             
+                                                                B 1                             
+...     ...     F s     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+                                        V p                                                     
+                                        B 2     S                       S                       
+                                                                        V s                     
+                                        U 1                             C                       
+...     ...     ...     ...     ...     ...     ...     ...     ...     F p     ...     ...     
+                                                                U 0                             
+...     ...     ...     ...     ...     F p     ...     ...     ...     ...     ...     ...     
+                                                V p                             S               
+                                                B 1                                             
+...     ...     ...     ...     ...     ...     ...     ...     F p     ...     ...     ...     
+                                                                                V s             
+S                       S       S                                               B 2             
+                                V s                                                             
+                                C                                               U 1             
+...     ...     ...     ...     F s     ...     ...     ...     ...     ...     ...     ...     
+                                                U 0                                             
+...     ...     ...     ...     ...     ...     ...     ...     ...     ...     F s     ...     
+V s                                                                                     S       
+B 1                                                                                             
+...     ...     ...     ...     ...     ...     F s     ...     ...     ...     ...     ...     
+                        V p                                                                     
+                        B 2                                                             V s     
+                        U 1                                                             C       
+...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     F s     
+U 0                                                                                             
+...     ...     ...     F s     ...     ...     ...     ...     ...     ...     ...     ...     
+                                                                                                
+F s     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+=================
