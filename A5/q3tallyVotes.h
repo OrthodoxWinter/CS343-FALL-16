@@ -1,15 +1,8 @@
-void TallyVotes::wait() {
-    bench.wait();                      // wait until signalled
-    while ( rand() % 5 == 0 ) {        // multiple bargers allowed
-        _Accept( vote ) {              // accept barging callers
-        } _Else {                      // do not wait if no callers
-        } // _Accept
-    } // while
-}
+#ifndef __TALLY_VOTES_H__
+#define __TALLY_VOTES_H__
 
-void TallyVotes::signalAll() {
-    while ( ! bench.empty() ) bench.signal(); // drain the condition
-}
+#include "AutomaticSignal.h"
+_Monitor Printer;
 
 #if defined( IMPLTYPE_EXT )            // external scheduling monitor solution
 // includes for this kind of vote-tallier
@@ -19,7 +12,7 @@ _Monitor TallyVotes {
 // includes for this kind of vote-tallier
 _Monitor TallyVotes {
     // private declarations for this kind of vote-tallier
-    uCondLock voteQueue;
+    uCondition voteQueue;
 #elif defined( IMPLTYPE_INTB )         // internal scheduling monitor solution with barging
 // includes for this kind of vote-tallier
 _Monitor TallyVotes {
@@ -32,6 +25,8 @@ _Monitor TallyVotes {
 // includes for this kind of vote-tallier
 _Monitor TallyVotes {
     // private declarations for this kind of vote-tallier
+    bool groupFormed;
+    AUTOMATIC_SIGNAL
 #elif defined( IMPLTYPE_TASK )         // internal/external scheduling task solution
 _Task TallyVotes {
     // private declarations for this kind of vote-tallier
@@ -42,7 +37,7 @@ _Task TallyVotes {
     Printer &printer;
     unsigned int count;
     int pictureTour;
-    Tour groupTour;
+    bool isPictureTour;
     // common declarations
   public:                              // common interface
     TallyVotes( unsigned int group, Printer &printer );
@@ -50,17 +45,4 @@ _Task TallyVotes {
     Tour vote( unsigned int id, Tour ballot );
 };
 
-_Task Voter {
-  public:
-    enum States { Start = 'S', Vote = 'V', Block = 'B', Unblock = 'U', Barging = 'b',
-                   Complete = 'C', Finished = 'F' };
-    Voter( unsigned int id, TallyVotes &voteTallier, Printer &printer );
-};
-
-_Monitor / _Cormonitor Printer {       // chose one of the two kinds of type constructor
-  public:
-    Printer( unsigned int voters );
-    void print( unsigned int id, Voter::States state );
-    void print( unsigned int id, Voter::States state, TallyVotes::Tour vote );
-    void print( unsigned int id, Voter::States state, unsigned int numBlocked );
-};
+#endif

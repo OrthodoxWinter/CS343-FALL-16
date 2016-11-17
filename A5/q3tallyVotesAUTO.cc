@@ -5,6 +5,7 @@
 TallyVotes::TallyVotes(unsigned int group, Printer &printer): groupSize(group), printer(printer) {
 	count = 0;
 	pictureTour = 0;
+	groupFormed = false;
 }
 
 TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
@@ -15,21 +16,22 @@ TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 	} else {
 		pictureTour--;
 	}
-	if (count < groupSize) {
+	if (count == groupSize) {
+		isPictureTour = pictureTour > 0
+		pictureTour = 0;
+		count--;
+		groupFormed = true;
+		printer.print(id, Voter::States::Complete);
+	} else {
+		groupFormed = false;
 		printer.print(id, Voter::States::Block, count);
-		voteQueue.wait();
+		WAITUNTIL(groupFormed == true)
 		count--;
 		printer.print(id, Voter::States::Unblock, count);
-	} else {
-		isPictureTour = pictureTour > 0;
-		count--;
-		pictureTour = 0;
-		printer.print(id, Voter::States::Complete);
-		while (!voteQueue.empty()) voteQueue.signal();
 	}
 	if (isPictureTour) {
-		return Picture;
+		RETURN(Picture);
 	} else {
-		return Statue;
+		RETURN(Statue);
 	}
 }
