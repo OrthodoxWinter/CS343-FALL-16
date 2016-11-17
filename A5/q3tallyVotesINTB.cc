@@ -12,9 +12,9 @@ TallyVotes::TallyVotes(unsigned int group, Printer &printer): groupSize(group), 
 TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 	unsigned int ticket = count;
 	count++;
-	if ((ticket % groupSize) != serving) {
-		printer.print(id, Voter::States::Barge);
-		while ((ticket % groupSize) != serving) {
+	if ((ticket / groupSize) != serving) {
+		printer.print(id, Voter::States::Barging);
+		while ((ticket / groupSize) != serving) {
 			wait();
 		}
 	}
@@ -28,8 +28,8 @@ TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 	if (numVoters < groupSize) {
 		printer.print(id, Voter::States::Block, numVoters);
 		wait();
-		printer.print(id, Voter::States::Unblock, numVoters);
 		numVoters--;
+		printer.print(id, Voter::States::Unblock, numVoters);
 		if (numVoters == 0) {
 			serving++;
 			signalAll();
