@@ -35,17 +35,13 @@ TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 			signalAll();
 		}
 	} else {
-		isPictureTour = pictureTour > 0;
+		result = pictureTour > 0 ? Picture : Statue;
 		pictureTour = 0;
 		numVoters--;
 		signalAll();
 		printer.print(id, Voter::States::Complete);
 	}
-	if (isPictureTour) {
-		return Picture;
-	} else {
-		return Statue;
-	}
+	return result;
 }
 
 void TallyVotes::wait() {

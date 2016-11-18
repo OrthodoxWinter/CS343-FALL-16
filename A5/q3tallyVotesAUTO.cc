@@ -17,21 +17,22 @@ TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 		pictureTour--;
 	}
 	if (count == groupSize) {
-		isPictureTour = pictureTour > 0
+		result = pictureTour > 0 ? Picture : Statue;
 		pictureTour = 0;
 		count--;
 		groupFormed = true;
 		printer.print(id, Voter::States::Complete);
 	} else {
 		groupFormed = false;
-		printer.print(id, Voter::States::Block, count);
-		WAITUNTIL(groupFormed == true)
-		count--;
-		printer.print(id, Voter::States::Unblock, count);
+		WAITUNTIL(
+			groupFormed == true,
+			printer.print(id, Voter::States::Block, count),
+			{
+				count--;
+				printer.print(id, Voter::States::Unblock, count);
+			}
+		);
+		
 	}
-	if (isPictureTour) {
-		RETURN(Picture);
-	} else {
-		RETURN(Statue);
-	}
+	RETURN(result);
 }

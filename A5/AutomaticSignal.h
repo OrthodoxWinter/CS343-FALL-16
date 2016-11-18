@@ -1,20 +1,20 @@
 #ifndef __AUTOMATIC_SIGNAL_H__
 #define __AUTOMATIC_SIGNAL_H__
 
-#define AUTOMATIC_SIGNAL uCondLock cond;
+#define AUTOMATIC_SIGNAL uCondition cond;
 
 #define WAITUNTIL(pred, before, after)	\
-	before	\
+	before;	\
 	if (!(pred)) {	\
 		cond.broadcast();	\
 		while (!(pred)) {	\
 			cond.wait();	\
 		}	\
 	}	\
-	after
+	after;
 
 #define RETURN(expr...)	\
-	cond.broadcast();	\
+	while (! cond.empty()) bench.signal();	\
 	return expr;
 
 #endif

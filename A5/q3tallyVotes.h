@@ -29,6 +29,9 @@ _Monitor TallyVotes {
     AUTOMATIC_SIGNAL
 #elif defined( IMPLTYPE_TASK )         // internal/external scheduling task solution
 _Task TallyVotes {
+    uCondition serverQueue, voterQueue;
+    bool terminate;
+    void main();
     // private declarations for this kind of vote-tallier
 #else
     #error unsupported voter type
@@ -37,12 +40,20 @@ _Task TallyVotes {
     Printer &printer;
     unsigned int count;
     int pictureTour;
-    bool isPictureTour;
     // common declarations
   public:                              // common interface
     TallyVotes( unsigned int group, Printer &printer );
     enum Tour { Picture, Statue };
     Tour vote( unsigned int id, Tour ballot );
+#ifdef IMPLTYPE_EXT
+    ~TallyVotes();
+#endif
+  private:
+    Tour result;
+#ifdef IMPLTYPE_EXT
+    unsigned int voteId;
+    Tour voteBallot;
+#endif
 };
 
 #endif
