@@ -20,9 +20,10 @@ TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 
 void TallyVotes::main() {
 	for (;;) {
-		serverQueue.signalBlock();
+		serverQueue.wait();
 		if (terminate) break;
 		count++;
+		printer.print(voteId, Voter::States::Block, count);
 		printer.print(voteId, Voter::States::Vote, voteBallot);
 		if (voteBallot == Picture) {
 			pictureTour++;
@@ -33,7 +34,6 @@ void TallyVotes::main() {
 			printer.print(voteId, Voter::States::Complete);
 			result = pictureTour > 0 ? Picture : Statue;
 			pictureTour = 0;
-			count--;
 			while (!voterQueue.empty()) voterQueue.signal();
 		}
 	}

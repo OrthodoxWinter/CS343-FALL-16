@@ -45,12 +45,12 @@ _Task TallyVotes {
     TallyVotes( unsigned int group, Printer &printer );
     enum Tour { Picture, Statue };
     Tour vote( unsigned int id, Tour ballot );
-#ifdef IMPLTYPE_EXT
+#ifdef IMPLTYPE_TASK
     ~TallyVotes();
 #endif
   private:
     Tour result;
-#ifdef IMPLTYPE_EXT
+#ifdef IMPLTYPE_TASK
     unsigned int voteId;
     Tour voteBallot;
 #endif
