@@ -6,7 +6,7 @@
 #define WAITUNTIL(pred, before, after)	\
 	before;	\
 	if (!(pred)) {	\
-		cond.broadcast();	\
+		while (! cond.empty()) cond.signal();	\
 		while (!(pred)) {	\
 			cond.wait();	\
 		}	\
@@ -14,7 +14,7 @@
 	after;
 
 #define RETURN(expr...)	\
-	while (! cond.empty()) bench.signal();	\
+	while (! cond.empty()) cond.signal();	\
 	return expr;
 
 #endif
