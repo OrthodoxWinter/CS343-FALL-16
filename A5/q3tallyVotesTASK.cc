@@ -23,8 +23,8 @@ void TallyVotes::main() {
 		serverQueue.wait();
 		if (terminate) break;
 		count++;
-		printer.print(voteId, Voter::States::Block, count);
 		printer.print(voteId, Voter::States::Vote, voteBallot);
+		printer.print(voteId, Voter::States::Block, count);
 		if (voteBallot == Picture) {
 			pictureTour++;
 		} else {
