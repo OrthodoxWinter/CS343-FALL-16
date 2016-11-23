@@ -1,0 +1,26 @@
+No PAD
+time ./new 1000000000
+0x630c10 0x630c08 0x630c00 0x630bf8 
+1000000000
+1000000000
+
+real	0m3.038s
+user	0m6.028s
+sys		0m0.056s
+
+PAD
+time ./new 1000000000
+0x630cc0 0x630c80 0x630c40 0x630c00 
+1000000000
+1000000000
+
+real	0m1.961s
+user	0m3.888s
+sys		0m0.036s
+
+With PAD defined, both user time and real time are about 50% faster than without PAD defined. When PAD are defined, the variables are allocated at addresses that are consecutive multiples of 64 bytes, in decreasing order. When PAD is not defined, memory address are not necessarily multiples of 64 and are variable distance apart. It's particularily important to note that in the non-PAD case, the address
+of counter1 and counter2 are less than 64 bytes apart. This means that both of these variables fit in the same cache block. During the program execution we have two processor and one task incrementing counter1 and one task incrementing counter2. Since the two variables fit on the same cache block, the processor must perform updates to the cache to make sure the caches of all the cores are in aggrement, to maintain cache coherence. Since in the PAD case variables are 64 bytes apart, the two variables fit on different cache blocks. The processor is then able to skip trying keep the caches in sync because the two threads in the program are access different part of the cache and don't intefere. I believe this accounts for the difference in performance. 
+
+In both cases, the variable address are growing downwards. It seems that in uC++, within a stack frame variables are allocated from the bottom to the top, which is the reason we see that address is always decreasing.
+
+There is a void* cast when printing the address because otherwise cout won't correcrtly treat pointers as addresses when printing. It will instead print out 1, which is not what we want.

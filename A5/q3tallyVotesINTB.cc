@@ -10,35 +10,33 @@ TallyVotes::TallyVotes(unsigned int group, Printer &printer): groupSize(group), 
 }
 
 TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
-	unsigned int ticket = count;
-	count++;
-	if ((ticket / groupSize) != serving) {
-		printer.print(id, Voter::States::Barging);
-		while ((ticket / groupSize) != serving) {
-			wait();
-		}
+	unsigned int ticket = count;									// assigns voter a ticket.
+	count++;														// increment count. Count here represents the next available ticket
+	while ((ticket / groupSize) != serving) {						// ticket / groupSize indicate the group number the voter belongs in
+		printer.print(id, Voter::States::Barging);					// group of this voter is not being server, which indicates barging
+		wait();
 	}
 	printer.print(id, Voter::States::Vote, ballot);
-	numVoters++;
-	if (ballot == Picture) {
+	numVoters++;													// increment num of voters waiting to go on tour in group
+	if (ballot == Picture) {										// cast vote
 		pictureTour++;
 	} else {
 		pictureTour--;
 	}
-	if (numVoters < groupSize) {
+	if (numVoters < groupSize) {									// if need more voters to form group, then wait
 		printer.print(id, Voter::States::Block, numVoters);
 		wait();
 		numVoters--;
 		printer.print(id, Voter::States::Unblock, numVoters);
-		if (numVoters == 0) {
-			serving++;
+		if (numVoters == 0) {										// if numVoter == 0 after decrement, then current voter is the last one in the group.
+			serving++;												// start serving the next group and wake up any blocked voters belonging to the next group
 			signalAll();
 		}
 	} else {
-		result = pictureTour > 0 ? Picture : Statue;
-		pictureTour = 0;
+		result = pictureTour > 0 ? Picture : Statue;				// group formed, so compute result of vote
+		pictureTour = 0;											// reset variables
 		numVoters--;
-		signalAll();
+		signalAll();												// wake up blocked voters from current group
 		printer.print(id, Voter::States::Complete);
 	}
 	return result;

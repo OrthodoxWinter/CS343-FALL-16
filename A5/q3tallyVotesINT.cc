@@ -8,24 +8,24 @@ TallyVotes::TallyVotes(unsigned int group, Printer &printer): groupSize(group), 
 }
 
 TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
-	count++;
+	count++;													// increment count. Conceptually count is the number of voters waiting to go on a tour
 	printer.print(id, Voter::States::Vote, ballot);
-	if (ballot == Picture) {
+	if (ballot == Picture) {									// cast vote
 		pictureTour++;
 	} else {
 		pictureTour--;
 	}
-	if (count < groupSize) {
+	if (count < groupSize) {									// if need more members, then wait on queue
 		printer.print(id, Voter::States::Block, count);
 		voteQueue.wait();
-		count--;
+		count--;												// decrement count on wake up
 		printer.print(id, Voter::States::Unblock, count);
-	} else {
-		result = pictureTour > 0 ? Picture : Statue;
+	} else {													// group formed
+		result = pictureTour > 0 ? Picture : Statue;			// compute result of vote
 		count--;
-		pictureTour = 0;
+		pictureTour = 0;										// reset vote variable for next round
 		printer.print(id, Voter::States::Complete);
-		while (!voteQueue.empty()) voteQueue.signal();
+		while (!voteQueue.empty()) voteQueue.signal();			// wake up all voter that are blocked
 	}
 	return result;
 }

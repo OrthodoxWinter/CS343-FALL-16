@@ -3,10 +3,10 @@
 #include "q3printer.h"
 
 void Voter::main() {
-	yield(rng() % 20);
+	yield(rng() % 20);																													// random yield
 	printer.print(id, Start);
 	yield(1);
-	TallyVotes::Tour tour = voteTallier.vote(id, (rng() % 2) == 0 ? TallyVotes::Tour::Picture : TallyVotes::Tour::Statue);
+	TallyVotes::Tour tour = voteTallier.vote(id, (rng() % 2) == 0 ? TallyVotes::Tour::Picture : TallyVotes::Tour::Statue);				// vote
 	yield(1);
 	printer.print(id, Finished, tour);
 }

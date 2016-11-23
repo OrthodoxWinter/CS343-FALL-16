@@ -8,22 +8,22 @@ TallyVotes::TallyVotes(unsigned int group, Printer &printer): groupSize(group), 
 }
 
 TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
-	count++;
+	count++;														// increment count
 	printer.print(id, Voter::States::Vote, ballot);
-	if (ballot == Picture) {
+	if (ballot == Picture) {										// cast vote
 		pictureTour++;
 	} else {
 		pictureTour--;
 	}
-	if (count < groupSize) {
+	if (count < groupSize) {										// if not enough members to form a group, then accept a new voter
 		printer.print(id, Voter::States::Block, count);
 		_Accept(vote);
-		count--;
+		count--;													// decrement count after wake up. Conceptually count is the number of voters waiting to go on tour
 		printer.print(id, Voter::States::Unblock, count);
 	} else {
-		result = pictureTour > 0 ? Picture : Statue;
-		count--;
-		pictureTour = 0;
+		result = pictureTour > 0 ? Picture : Statue;				// compute the result of the vote
+		count--;													// decrement count
+		pictureTour = 0;											// reset vote for next round
 		printer.print(id, Voter::States::Complete);
 	}
 	return result;
