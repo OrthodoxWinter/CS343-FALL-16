@@ -28,16 +28,16 @@ TallyVotes::Tour TallyVotes::vote(unsigned int id, Tour ballot) {
 		wait();
 		numVoters--;
 		printer.print(id, Voter::States::Unblock, numVoters);
-		if (numVoters == 0) {										// if numVoter == 0 after decrement, then current voter is the last one in the group.
-			serving++;												// start serving the next group and wake up any blocked voters belonging to the next group
-			signalAll();
-		}
 	} else {
 		result = pictureTour > 0 ? Picture : Statue;				// group formed, so compute result of vote
 		pictureTour = 0;											// reset variables
 		numVoters--;
 		signalAll();												// wake up blocked voters from current group
 		printer.print(id, Voter::States::Complete);
+	}
+	if (numVoters == 0) {										// if numVoter == 0 after decrement, then current voter is the last one in the group.
+		serving++;												// start serving the next group and wake up any blocked voters belonging to the next group
+		signalAll();
 	}
 	return result;
 }

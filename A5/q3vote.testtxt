@@ -1,0 +1,384 @@
+Tests
+
+1. Testing invalid input with even group size.
+2. Testing invalid input with voters not divisible by group size.
+3. Testing invalid input with voters < 0
+4. Testing invalid input with group < 0
+5. Testing invalid input with seed < 0
+6. Testing with no arguments gives 6 voters and 3 group size
+7. Testing case where there group=1 and verify output make sense. Specifically, make sure no blocking (except TAKS)/barging and voting result is correct.
+8. Testing a normal case with voters=9 and group=3 and verify output make sense. Specifically, checking block/unblock message are resonable and voting result is correct. Tested for each implementation
+
+Output
+
+1.
+./vote 20 2
+Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)
+
+2.
+./vote 27 8
+Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)
+
+3.
+./vote -1 1
+Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)
+
+4.
+./vote 1 -1
+Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)
+
+5.
+./vote 6 3 -1
+Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)
+
+6.
+./vote
+Voter0	Voter1	Voter2	Voter3	Voter4	Voter5	
+=======	=======	=======	=======	=======	=======	
+	S					
+	V s					
+	B 1	S	S		S	
+		V p				
+		B 2	V s			
+		U 1	C			
+...	...	...	F s	...	...	
+S	U 0					
+...	...	F s	...	...	...	
+					V s	
+					B 1	
+...	F s	...	...	...	...	
+V s						
+B 2				S		
+				V p		
+U 1				C		
+...	...	...	...	F s	...	
+					U 0	
+F s	...	...	...	...	...	
+...	...	...	...	...	F s	
+=================
+All tours started
+
+7.
+
+EXT
+
+./vote 5 1
+Voter0	Voter1	Voter2	Voter3	Voter4	
+=======	=======	=======	=======	=======	
+S	S				
+	V p				
+V s	C		S		
+C					
+...	F p	...	...	...	
+			V p		
+			C	S	
+F s	...	...	...	...	
+...	...	...	F p	...	
+				V p	
+				C	
+...	...	...	...	F p	
+		S			
+		V s			
+		C			
+...	...	F s	...	...	
+=================
+All tours started
+
+INT
+
+./vote 5 1
+Voter0	Voter1	Voter2	Voter3	Voter4	
+=======	=======	=======	=======	=======	
+S				S	
+				V p	
+V p				C	
+C					
+...	...	...	...	F p	
+F p	...	...	...	...	
+		S			
+		V p			
+		C			
+...	...	F p	...	...	
+	S				
+	V p				
+	C				
+...	F p	...	...	...	
+			S		
+			V s		
+			C		
+...	...	...	F s	...	
+=================
+All tours started
+
+INTB
+
+./vote 5 1
+Voter0	Voter1	Voter2	Voter3	Voter4	
+=======	=======	=======	=======	=======	
+S				S	
+V p					
+C				V s	
+				C	
+F p	...	...	...	...	
+...	...	...	...	F s	
+		S			
+		V p			
+	S	C			
+...	...	F p	...	...	
+	V p				
+	C				
+...	F p	...	...	...	
+			S		
+			V p		
+			C		
+...	...	...	F p	...	
+=================
+All tours started
+
+AUTO
+
+./vote 5 1
+Voter0	Voter1	Voter2	Voter3	Voter4	
+=======	=======	=======	=======	=======	
+		S			
+		V s			
+S		C			
+...	...	F s	...	...	
+V p					
+C					
+F p	...	...	...	...	
+			S		
+			V p		
+	S		C	S	
+...	...	...	F p	...	
+				V s	
+	V s			C	
+	C				
+...	...	...	...	F s	
+...	F s	...	...	...	
+=================
+All tours started
+
+TAKS
+
+./vote 5 1
+Voter0	Voter1	Voter2	Voter3	Voter4	
+=======	=======	=======	=======	=======	
+			S	S	
+				V s	
+				B 1	
+				C	
+S				U 0	
+...	...	...	...	F s	
+		S	V s		
+			B 1		
+			C		
+	S		U 0		
+...	...	...	F s	...	
+V s					
+B 1					
+C					
+U 0					
+F s	...	...	...	...	
+		V s			
+		B 1			
+		C			
+		U 0			
+...	...	F s	...	...	
+	V p				
+	B 1				
+	C				
+	U 0				
+...	F p	...	...	...	
+=================
+All tours started
+
+
+8.
+
+EXT
+
+./vote 9 3 1345723
+Voter0	Voter1	Voter2	Voter3	Voter4	Voter5	Voter6	Voter7	Voter8	
+=======	=======	=======	=======	=======	=======	=======	=======	=======	
+		S							
+		V p							
+		B 1	S			S	S		
+							V p		
+	S		V s				B 2		
+			C				U 1		
+...	...	...	F p	...	...	...	...	...	
+		U 0						S	
+...	...	...	...	...	...	...	F p	...	
+						V p			
+						B 1			
+...	...	F p	...	...	...	...	...	...	
+	V s								
+	B 2				S			V s	
+S	U 1							C	
+...	...	...	...	...	...	...	...	F s	
+						U 0			
+...	F s	...	...	...	...	...	...	...	
+					V s				
+					B 1				
+...	...	...	...	...	...	F s	...	...	
+V s				S					
+B 2				V s					
+U 1				C					
+...	...	...	...	F s	...	...	...	...	
+					U 0				
+F s	...	...	...	...	...	...	...	...	
+...	...	...	...	...	F s	...	...	...	
+=================
+All tours started
+
+INT
+
+./vote 9 3 1345723
+Voter0	Voter1	Voter2	Voter3	Voter4	Voter5	Voter6	Voter7	Voter8	
+=======	=======	=======	=======	=======	=======	=======	=======	=======	
+		S							
+		V p							
+		B 1	S			S	S		
+							V p		
+	S		V s				B 2		
+			C				U 1		
+...	...	...	F p	...	...	...	...	...	
+		U 0						S	
+...	...	...	...	...	...	...	F p	...	
+						V p			
+						B 1			
+...	...	F p	...	...	...	...	...	...	
+	V s								
+	B 2				S			V s	
+S	U 1							C	
+...	...	...	...	...	...	...	...	F s	
+						U 0			
+...	F s	...	...	...	...	...	...	...	
+					V s				
+					B 1				
+...	...	...	...	...	...	F s	...	...	
+V s				S					
+B 2				V s					
+U 1				C					
+...	...	...	...	F s	...	...	...	...	
+					U 0				
+F s	...	...	...	...	...	...	...	...	
+...	...	...	...	...	F s	...	...	...	
+=================
+All tours started
+
+INTB
+
+./vote 9 3 427943
+Voter0	Voter1	Voter2	Voter3	Voter4	Voter5	Voter6	Voter7	Voter8	
+=======	=======	=======	=======	=======	=======	=======	=======	=======	
+						S			
+						V p			
+				S	S	B 1	S		
+							V p		
+				V p			B 2		
+S				C			U 1		
+...	...	...	...	F p	...	...	...	...	
+...	...	...	...	...	...	...	F p	...	
+					b	U 0			
+					V p				
+					B 1				
+...	...	...	...	...	...	F p	...	...	
+V p									
+B 2								S	
+								V p	
+U 1	S							C	
+...	...	...	...	...	...	...	...	F p	
+F p	...	...	...	...	...	...	...	...	
+	b		S		U 0				
+	V s								
+	B 1								
+...	...	...	...	...	F p	...	...	...	
+		S	V s						
+		V p	B 2						
+		C	U 1						
+...	...	F s	...	...	...	...	...	...	
+	U 0								
+...	...	...	F s	...	...	...	...	...	
+...	F s	...	...	...	...	...	...	...	
+=================
+All tours started
+
+AUTO
+
+./vote 9 3 1345723
+Voter0	Voter1	Voter2	Voter3	Voter4	Voter5	Voter6	Voter7	Voter8	
+=======	=======	=======	=======	=======	=======	=======	=======	=======	
+		S							
+		V p							
+		B 1	S			S	S		
+							V p		
+	S		V s				B 2		
+		U 1	C					S	
+...	...	...	F p	...	...	...	...	...	
+							U 0		
+...	...	F p	...	...	...	...	...	...	
+					S	V p			
+						B 1			
+...	...	...	...	...	...	...	F p	...	
+	V s								
+S	B 2							V s	
+				S		U 1		C	
+...	...	...	...	...	...	...	...	F s	
+	U 0								
+...	...	...	...	...	...	F s	...	...	
+					V s				
+					B 1				
+...	F s	...	...	...	...	...	...	...	
+V s									
+B 2				V s					
+				C	U 1				
+...	...	...	...	F s	...	...	...	...	
+U 0									
+...	...	...	...	...	F s	...	...	...	
+F s	...	...	...	...	...	...	...	...	
+=================
+All tours started
+
+
+TASK
+
+./vote 9 3 1345723
+Voter0	Voter1	Voter2	Voter3	Voter4	Voter5	Voter6	Voter7	Voter8	
+=======	=======	=======	=======	=======	=======	=======	=======	=======	
+		S							
+		V p							
+	S	B 1	S			S	S		
+							V p		
+			V s				B 2	S	
+			B 3						
+			C						
+			U 2		S		U 1		
+...	...	...	F p	...	...	...	...	...	
+		U 0							
+...	...	...	...	...	...	...	F p	...	
+S									
+...	...	F p	...	...	...	...	...	...	
+						V p			
+	V s			S		B 1			
+	B 2							V s	
+								B 3	
+								C	
+	U 1							U 2	
+...	...	...	...	...	...	...	...	F s	
+						U 0			
+...	F s	...	...	...	...	...	...	...	
+...	...	...	...	...	...	F s	...	...	
+					V s				
+V s					B 1				
+B 2				V s					
+				B 3					
+				C					
+U 1				U 2					
+...	...	...	...	F s	...	...	...	...	
+					U 0				
+F s	...	...	...	...	...	...	...	...	
+...	...	...	...	...	F s	...	...	...	
+=================
+All tours started
