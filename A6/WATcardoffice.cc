@@ -33,10 +33,37 @@ void WATCardOffice::main() {
 				_Accept(requestWork)
 			}
 			break;
-		} _Or _Accept(create) {
-
-		} _Or _Accept(transfer) {
-			
-		}
+		} 
+		or _Accept(create || transfer)
+		or _When(queue.size() > 0) _Accept(requestWork)
 	}
+}
+
+WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount) {
+	WATCard *card = new WATCard();
+	Args args(id, amount, card);
+	Job *job = new Job(args)
+	queue.push(job);
+	return job->result;
+}
+
+WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard *card ) {
+	Args args(id, amount, card);
+	Job *job = new Job(args)
+	queue.push(job);
+	return job->result;
+}
+
+WATCardOffice::~WATCardOffice() {
+	/*	not sure if this is needed
+	while (queue.size() != 0) {
+		Job *job = queue.front();
+		queue.pop();
+		delete job;
+	}
+	*/
+	for (unsigned int i = 0; i < numCouriers; i++) {
+		delete couriers[i];
+	}
+	delete[] couriers;
 }
