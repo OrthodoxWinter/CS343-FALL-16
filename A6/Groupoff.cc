@@ -4,14 +4,15 @@ Groupoff::Groupoff(Printer &prt, unsigned int numStudents, unsigned int sodaCost
 
 void Groupoff::main(){
 	for (;;){
-		_Accept(~Parent) {
+		_Accept(~Groupoff) {
 			break;
 		}
 		_Else {
 			yield(groupoffDelay);
-			unsigned int amount = rng(2) + 1;
-			unsigned int student = rng() % numStudents;
-			bank.deposit(student, amount);
+
 		}
 	}
 }
+
+WATCard::FWATCard Groupoff::giftCard(){
+};
