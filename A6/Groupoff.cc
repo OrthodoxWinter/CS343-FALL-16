@@ -6,7 +6,7 @@ void Groupoff::main(){
 	for (;;){
 		_Accept(~Groupoff) {
 			break;
-		}
+		} or _accept(giftCard)
 		_Else {
 			yield(groupoffDelay);
 
