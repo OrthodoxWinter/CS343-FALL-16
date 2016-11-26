@@ -1,4 +1,7 @@
 Task NameServer {
+	Printer &prt;
+	unsigned int numVendingMachines;
+	unsigned int numStudents;
 	void main();
 	public:
 	NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents );

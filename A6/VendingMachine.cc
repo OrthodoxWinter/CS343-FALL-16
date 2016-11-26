@@ -9,20 +9,16 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 
 
 void VendingMachine:: buy( Flavours flavour, WATCard &card ){
-	try {
-		if (getBalance() < sodaCost){
+	if (getBalance() < sodaCost){
 			throw _Funds();
-		}
-		if (inventory[flavour] <= 0){
-			throw _Stock();
-		}
-		card->withdraw(sodaCost);
-	} catch(_Event e){
-
 	}
+	if (inventory[flavour] <= 0){
+		throw _Stock();
+	}
+	card->withdraw(sodaCost);
 };
 void VendingMachine:: main(){
-	nameServer->VMregister(&this);
+	nameServer->VMregister(*this);
 	for (;;){
 		_Accept(~VendingMachine){
 			break;
