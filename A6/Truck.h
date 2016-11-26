@@ -1,3 +1,9 @@
+#ifndef __TRUCK_H__
+#define __TRUCK_H__
+#include "printer.h"
+#include "NameServer.h"
+#include "BottlingPlant.h"
+_Task BottlingPlant;
 _Task Truck {
 	Printer &prt;
 	NameServer &nameServer;
@@ -12,3 +18,4 @@ _Task Truck {
            unsigned int numVendingMachines, unsigned int maxStockPerFlavour );
     ~Truck();
 };
+#endif

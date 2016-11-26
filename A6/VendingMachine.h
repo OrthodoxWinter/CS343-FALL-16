@@ -1,5 +1,9 @@
-#include "NameServer";
-#include "Printer.h"
+#ifndef __VENDINGMACHINE_H
+#define __VENDINGMACHINE_H
+#include "NameServer.h"
+#include "printer.h"
+#include "WATcard.h"
+_Task NameServer;
 _Task VendingMachine {
     Printer &prt;
     NameServer &nameServer;
@@ -7,7 +11,7 @@ _Task VendingMachine {
     unsigned int sodaCost;
     unsigned int maxStockPerFlavour;
     bool isRestocked;
-    int *inventory;
+    int *ivty;
     void main();
   public:
     enum Flavours { GRAPE, APPLE, ORANGE };                    // flavours of soda (YOU DEFINE)
@@ -23,3 +27,4 @@ _Task VendingMachine {
     ~VendingMachine();
 };
 
+#endif

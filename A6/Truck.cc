@@ -1,4 +1,5 @@
 #include "Truck.h"
+#include "BottlingPlant.h"
 #include "VendingMachine.h"
 #include "rng.h"
 
@@ -36,6 +37,8 @@ void Truck::main(){
 					}
 				}
 			}
+			//Call vending machine restock to notify it has been restocked
+			vm->restocked();
 			lastVendingMachine += 1;
 			counter += 1;
 			// check if the truck is empty < 0

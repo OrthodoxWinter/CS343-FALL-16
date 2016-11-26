@@ -1,15 +1,19 @@
-#include "Printer.h"
+#ifndef __BOTTLINGPLANT_H
+#define __BOTTLINGPLANT_H
+#include "printer.h"
+#include "Truck.h"
 #include "NameServer.h"
 
 
 _Task BottlingPlant {
 	Printer &prt;
 	NameServer &nameServer;
+	Truck *tr;
 	unsigned int numVendingMachines;
 	unsigned int maxShippedPerFlavour;
 	unsigned int maxStockPerFlavour;
 	unsigned int timeBetweenShipments;
-	int production[]; // production
+	unsigned int * production; // production
 	bool finishPickUp;// flag to know if it has picked up the current run;
 	bool isShutDown;// flag to know if it is shut down
     void main();
@@ -21,3 +25,4 @@ _Task BottlingPlant {
     void getShipment( unsigned int cargo[] );
     ~BottlingPlant();
 };
+#endif

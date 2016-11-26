@@ -1,19 +1,20 @@
-#include "VendingMachine.h"
 
+#include "VendingMachine.h"
+#include "nameServer.h"
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
                     unsigned int maxStockPerFlavour): prt(prt),nameServer(nameServer),id(id),sodaCost(sodaCost),maxStockPerFlavour(maxStockPerFlavour){
 	// initialize the inventory array
-	inventory = new int[3];
+	ivty = new int[3];
 	isRestocked  = false;
 };
 
 
 void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 	if (getBalance() < sodaCost){
-			throw _Funds();
+			_Throw Funds();
 	}
-	if (inventory[flavour] <= 0){
-		throw _Stock();
+	if (ivty[flavour] <= 0){
+		_Throw Stock();
 	}
 	card->withdraw(sodaCost);
 };
@@ -29,7 +30,7 @@ void VendingMachine:: main(){
 }
 
 unsigned int VendingMachine:: *inventory(){
-	return inventory;
+	return ivty;
 }
 void VendingMachine::restocked(){
 	isRestocked = true;
@@ -37,7 +38,7 @@ void VendingMachine::restocked(){
 
 
 VendingMachine:: ~VendingMachine(){
-	delete[] inventory;
+	delete[] ivty;
 }
 
 _Nomutex VendingMachine::unsigned int getId(){

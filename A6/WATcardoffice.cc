@@ -19,7 +19,7 @@ void WATCardOffice::Courier::main() {
 	}
 }
 
-WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : printer(printer), bank(bank), numCouriers(numCouriers), terminate(false), jobs(numCouriers) {}
+WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : printer(printer), bank(bank), numCouriers(numCouriers), terminate(false) {}
 
 void WATCardOffice::main() {
 	couriers = new Courier*[numCouriers];
@@ -35,7 +35,7 @@ void WATCardOffice::main() {
 			break;
 		} 
 		or _Accept(create || transfer)
-		or _When(jobs.size() > 0) _Accept(requestWork)
+		or _When(queue.size() > 0) _Accept(requestWork)
 	}
 }
 
@@ -43,27 +43,27 @@ WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount) {
 	WATCard *card = new WATCard();
 	Args args(id, amount, card);
 	Job *job = new Job(args)
-	jobs.push(job);
+	queue.push(job);
 	return job->result;
 }
 
 WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard *card ) {
 	Args args(id, amount, card);
 	Job *job = new Job(args)
-	jobs.push(job);
+	queue.push(job);
 	return job->result;
 }
 
 WATCardOffice::~WATCardOffice() {
-	//not going to check if job queue is non-empty, because if the program executes correctly, it should be empty at this point
+	/*	not sure if this is needed
+	while (queue.size() != 0) {
+		Job *job = queue.front();
+		queue.pop();
+		delete job;
+	}
+	*/
 	for (unsigned int i = 0; i < numCouriers; i++) {
 		delete couriers[i];
 	}
 	delete[] couriers;
-}
-
-Job *WATCardOffice::requestWork() {
-	Job* job = jobs.front();
-	jobs.pop();
-	return job;
 }

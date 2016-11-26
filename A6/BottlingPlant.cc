@@ -3,19 +3,19 @@
 #include "Truck.h"
  BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,
                  unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
-                 unsigned int timeBetweenShipments ):prt(prt), nameServer(nameServer), numVendingMachines(numVendingMachines), maxStockPerFlavour(maxShippedPerFlavour), maxStockPerFlavour(maxStockPerFlavour), timeBetweenShipments(timeBetweenShipments){
+                 unsigned int timeBetweenShipments ):prt(prt), nameServer(nameServer), numVendingMachines(numVendingMachines), maxStockPerFlavour(maxShippedPerFlavour), timeBetweenShipments(timeBetweenShipments)
 
- }{
+ {
  	// create production array
- 	production = new int[3];
+ 	production = new unsigned int[3];
  	isShutDown = false;
  	finishPickUp = true;
  }
 
- BottlingPlant::main(){
+ void BottlingPlant::main(){
  	// start by creating a new truck
- 	Truck *truck = new Truck(prt, plant, numVendingMachines, maxStockPerFlavour);
- 	for (;;;){
+ 	tr = new Truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
+ 	for (;;){
  		 _Accept(~BottlingPlant){
  		 	isShutDown = true;
  		 	break;
@@ -32,9 +32,9 @@
  	}
  }
 
- void getShipment( unsigned int cargo[] ){
+ void BottlingPlant::getShipment( unsigned int cargo[] ){
  	if (isShutDown){
- 		throw _ShutDown();
+ 		_Throw Shutdown();
  	}
  	finishPickUp = false;
  	for (int i = 0; i < 3; i++){
@@ -49,5 +49,6 @@
 
 
  BottlingPlant::~BottlingPlant(){
+ 	delete tr;
  	delete[] production;
  }
