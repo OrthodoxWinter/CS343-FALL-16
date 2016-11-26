@@ -28,12 +28,12 @@ _Task WATCardOffice {
         Courier(Bank &bank, WATCardOffice &office);
     };                    // communicates with bank
 
-    queue<Job*> jobs;
     Courier** couriers;
     Printer &printer;
     Bank &bank;
     unsigned int numCouriers;
     bool terminate;
+    queue<Job*> jobs;
     void main();
   public:
     _Event Lost {};                           // lost WATCard
