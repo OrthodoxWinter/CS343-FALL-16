@@ -2,7 +2,7 @@
 #define __BANK_H__
 
 _Monitor Bank {
-	unsigned int *amount;
+	unsigned int *bankAmount;
 	unsigned int *toWithdraw;
 	uCondition *bench;
   public:

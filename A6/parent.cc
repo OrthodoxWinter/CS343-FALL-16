@@ -4,6 +4,7 @@
 Parent::Parent( Printer &prt, Bank &bank, unsigned int numStudents, unsigned int parentalDelay ) : printer(prt), bank(bank), numStudents(numStudents), parentalDelay(parentalDelay) {}
 
 void Parent::main() {
+	printer.print(Printer::Kind::Parent, 'S');
 	for (;;) {
 		_Accept(~Parent) {
 			break;
@@ -15,4 +16,5 @@ void Parent::main() {
 			bank.deposit(student, amount);
 		}
 	}
+	printer.print(Printer::Kind::Parent, 'F');
 }

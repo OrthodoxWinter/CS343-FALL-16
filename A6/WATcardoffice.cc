@@ -1,69 +1,76 @@
 #include "WATcardoffice.h"
 #include "rng.h"
 
-void WATCardOffice::Courier::main() {
-	while (;;) {
-		Job *job = office.requestWork();
-		if (job == NULL) break;
-		WATCard *card = job->args.card;
-		if (rng(5) != 0) {
-			unsigned int amount = job->args.amount;
-			bank.withdraw(job->args.id, amount);
-			card->deposit(amount);
-			job->result.deliver(card);
-		} else {
-			delete card;
-			job->result.exception(new Lost());
-		}
-		delete job;
+WATCardOffice::WATCardOffice(Printer &printer, Bank &bank, unsigned int numCouriers) : printer(printer), bank(bank), numCouriers(numCouriers), terminate(false) {
+	couriers = new Courier*[numCouriers];
+	for (unsigned int i = 0; i < numCouriers; i++) {
+		couriers[i] = new Courier(i, *this, bank, printer);
 	}
 }
 
-WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : printer(printer), bank(bank), numCouriers(numCouriers), terminate(false) {}
+WATCardOffice::~WATCardOffice() {
+	for (unsigned int i = 0; i < numCouriers; i++) {
+		delete couriers[i];
+	}
+	delete [] couriers;
+}
+
+WATCardOffice::Courier::Courier(unsigned int id, WATCardOffice &office, Bank &bank, Printer &printer) : id(id), office(office), bank(bank), printer(printer) {}
+
+void WATCardOffice::Courier::main() {
+	printer.print(Printer::Kind::Courier, id, 'S');
+	for (;;) {
+		Job *job = office.requestWork();
+		if (job == NULL) break;
+		Args &args = job->args;
+		if (rng(6) != 3) {
+			printer.print(Printer::Kind::Courier, id, 't', args.sid, args.amount);
+			bank.withdraw(args.sid, args.amount);
+			args.card->deposit(args.amount);
+			job->result.delivery(args.card);
+			printer.print(Printer::Kind::Courier, id, 'T', args.sid, args.amount);
+		} else {
+			delete args.card;
+			job->result.exception(new Lost());
+		}
+		delete job;
+  	}
+	printer.print(Printer::Kind::Courier, id, 'F');
+}
 
 void WATCardOffice::main() {
-	couriers = new Courier*[numCouriers];
-	for (unsigned int i = 0; i < numCouriers; i++) {
-		couriers[i] = new Courier(bank, *this);
-	}
+	printer.print(Printer::Kind::WATCardOffice, 'S');
 	for (;;) {
 		_Accept(~WATCardOffice) {
 			terminate = true;
 			for (unsigned int i = 0; i < numCouriers; i++) {
-				_Accept(requestWork)
+				_Accept(requestWork);
 			}
 			break;
-		} 
-		or _Accept(create || transfer)
-		or _When(queue.size() > 0) _Accept(requestWork)
+		}
+		or _Accept(create, transfer) {
+			_Accept(requestWork);
+		}
 	}
+	printer.print(Printer::Kind::WATCardOffice, 'F');
 }
 
 WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount) {
 	WATCard *card = new WATCard();
-	Args args(id, amount, card);
-	Job *job = new Job(args)
-	queue.push(job);
-	return job->result;
+	nextJob = new Job(Args(sid, card, amount));
+	printer.print(Printer::Kind::WATCardOffice, 'C', sid, amount);
+	return nextJob->result;
 }
 
-WATCard::FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard *card ) {
-	Args args(id, amount, card);
-	Job *job = new Job(args)
-	queue.push(job);
-	return job->result;
+WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount, WATCard *card) {
+	nextJob = new Job(Args(sid, card, amount));
+	printer.print(Printer::Kind::WATCardOffice, 'T', sid, amount);
+	return nextJob->result;
 }
 
-WATCardOffice::~WATCardOffice() {
-	/*	not sure if this is needed
-	while (queue.size() != 0) {
-		Job *job = queue.front();
-		queue.pop();
-		delete job;
-	}
-	*/
-	for (unsigned int i = 0; i < numCouriers; i++) {
-		delete couriers[i];
-	}
-	delete[] couriers;
+WATCardOffice::Job *WATCardOffice::requestWork() {
+	if (terminate) return NULL;
+	Job *job = nextJob;
+	nextJob = NULL;
+	return job;
 }

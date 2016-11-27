@@ -1,5 +1,5 @@
 CXX = u++					# compiler
-CXXFLAGS = -g -Wall -Wno-unused-label -MMD
+CXXFLAGS = -g -multi -Wall -Wno-unused-label -MMD -std=c++11
 MAKEFILE_NAME = ${firstword ${MAKEFILE_LIST}}	# makefile name
 
 OBJECTS = main.o  BottlingPlant.o VendingMachine.o NameServer.o Truck.o printer.o rng.o

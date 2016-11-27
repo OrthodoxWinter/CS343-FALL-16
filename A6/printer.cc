@@ -7,7 +7,7 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 	total = 6 + numStudents + numVendingMachines + numCouriers;
 	states = new State[total];
 	cout << "Parent" << '\t';
-	cout << "Groupoff" << '\t';
+	cout << "Gropoff" << '\t';
 	cout << "WATOff" << '\t';
 	cout << "Names" << '\t';
 	cout << "Truck" << '\t';
@@ -17,13 +17,10 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 	printLoop(numCouriers, "Cour");
 	cout << endl;
 	printLoop(6, "*******", false);
-	printLoop(numStudents, "*******");
-	printLoop(numVendingMachines, "*******");
-	printLoop(numCouriers, "*******");
+	printLoop(numStudents, "*******", false);
+	printLoop(numVendingMachines, "*******", false);
+	printLoop(numCouriers, "*******", false);
 	cout << endl;
-	for (int i = 0; i < total; i++) {
-		states[i].state = '';
-	}
 }
 
 Printer::~Printer() {
@@ -39,80 +36,84 @@ void Printer::printLoop(unsigned int times, string value, bool withIndex) {
 	}
 }
 
-void State& Printer::getState(Kind kind, unsigned int id) {
+unsigned int Printer::getIndex(Kind kind, unsigned int id) {
 	switch (kind) {
 		case Student:
-			return states[6 + id];
+			return 6 + id;
 		case Vending:
-			return states[6 + numStudents + id];
+			return 6 + numStudents + id;
 		case Courier:
-			return states[6 + numStudents + numVendingMachines + id];
+			return 6 + numStudents + numVendingMachines + id;
 		default:
-			return states[kind];
+			return (unsigned int) kind;
 	}
 }
 
-void flush(string empty) {
+void Printer::flush(string empty) {
 	for (unsigned int i = 0; i < total; i++) {
-		State &state = states[i];
-		if (state.state == '') {
+		if (states[i].state == '\0') {
 			cout << empty;
 		} else {
-			cout << state.state;
-			if (state.value1 >= 0) {
-				cout << state.value1;
-				if (state.value2 >= 0) cout << ',' << value2;
+			cout << states[i].state;
+			if (states[i].value1 >= 0) {
+				cout << states[i].value1;
+				if (states[i].value2 >= 0) cout << ',' << states[i].value2;
 			}
+			states[i].state = '\0';
 		}
-		state.state = '';
 		cout << '\t';
 	}
 	cout << endl;
 }
 
-void Printer::print(State &state, State &newState) {
+void Printer::print(unsigned int index, State &newState) {
 	if (newState.state == 'F') {
-		flush();
-		state = newState;
+		for (unsigned int i = 0; i < total; i++) {
+			if (states[i].state != '\0') {
+				flush();
+				break;
+			}
+		}
+		states[index] = newState;
 		flush("...");
 	} else {
-		if (state.state != '') flush();
-		state = newState;
+		if (states[index].state != '\0') flush();
+		states[index] = newState;
 	}
 }
 
 void Printer::print(Kind kind, char state) {
-	State &state = getState(kind);
+	unsigned int index = getIndex(kind);
 	State newState(state);
-	print(state, newState);
+	print(index, newState);
 }
 
 void Printer::print(Kind kind, char state, int value1) {
-	State &state = getState(kind);
+	unsigned int index = getIndex(kind);
 	State newState(state, value1);
-	print(state, newState);
+	print(index, newState);
 }
 
 void Printer::print( Kind kind, char state, int value1, int value2 ) {
-	State &state = getState(kind);
+	unsigned int index = getIndex(kind);
 	State newState(state, value1, value2);
-	print(state, newState);
+	print(index, newState);
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state ) {
-	State &state = getState(kind, lid);
+	unsigned int index = getIndex(kind, lid);
 	State newState(state);
-	print(state, newState);
+	print(index, newState);
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state, int value1 ) {
-	State &state = getState(kind, lid);
+	unsigned int index = getIndex(kind, lid);
 	State newState(state, value1);
-	print(state, newState);
+	print(index, newState);
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ) {
-	State &state = getState(kind, lid);
+	unsigned int index = getIndex(kind, lid);
 	State newState(state, value1, value2);
-	print(state, newState);
+	print(index, newState);
 }
