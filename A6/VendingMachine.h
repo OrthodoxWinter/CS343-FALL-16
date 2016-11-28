@@ -1,8 +1,12 @@
 #ifndef __VENDINGMACHINE_H
 #define __VENDINGMACHINE_H
+
 #include "NameServer.h"
 #include "printer.h"
 #include "WATcard.h"
+
+#define NUM_FLAVORS 3
+
 _Task NameServer;
 _Task VendingMachine {
     Printer &prt;
@@ -10,11 +14,11 @@ _Task VendingMachine {
     unsigned int id;
     unsigned int sodaCost;
     unsigned int maxStockPerFlavour;
-    bool isRestocked;
-    int *ivty;
+    bool isRestocking;
+    int ivty[NUM_FLAVORS];
     void main();
   public:
-    enum Flavours { GRAPE, APPLE, ORANGE };                    // flavours of soda (YOU DEFINE)
+    enum Flavours { GRAPE = 0, APPLE = 1, ORANGE = 2 };                    // flavours of soda (YOU DEFINE)
     _Event Funds {};                          // insufficient funds
     _Event Stock {};                          // out of stock for particular flavour
     VendingMachine( Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
@@ -24,7 +28,6 @@ _Task VendingMachine {
     void restocked();
     _Nomutex unsigned int cost();
     _Nomutex unsigned int getId();
-    ~VendingMachine();
 };
 
 #endif
