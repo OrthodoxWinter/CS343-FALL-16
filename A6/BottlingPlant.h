@@ -13,7 +13,7 @@ _Task BottlingPlant {
 	unsigned int maxShippedPerFlavour;
 	unsigned int maxStockPerFlavour;
 	unsigned int timeBetweenShipments;
-	unsigned int * production; // production
+	unsigned int produced[NUM_FLAVORS]; // production
 	bool finishPickUp;// flag to know if it has picked up the current run;
 	bool isShutDown;// flag to know if it is shut down
     void main();

@@ -7,24 +7,27 @@ NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned 
 	};
 
 void NameServer::VMregister(VendingMachine *vendingmachine){
-	int id = vendingmachine->getId();
-	machineList[id] = vendingmachine;
+	printer.print(Printer::kind:NameServer, 'R', vendingmachine->getId());
+	machineList[counter] = vendingmachine;
+	counter += 1;
 }
 VendingMachine * NameServer::getMachine(unsigned int id){
-	int last = lastPos % numVendingMachines;
-	lastPos += 1;
-	return machineList[last];
+	int nextMachine = (id + 1) % numVendingMachines;
+	return machineList[nextMachine];
 } 
 VendingMachine ** NameServer::getMachineList(){
 	return machineList;
 }
 
 void NameServer::main(){
+	printer.print(Printer::Kind::NameServer, 'S');
 	for (;;){
 		_Accept(~NameServer){
 			break;
 		} or _Accept(getMachineList, getMachine)
 	}
+	printer.print(Printer::Kind::NameServer, 'F');
+
 }
 
 NameServer::~NameServer(){

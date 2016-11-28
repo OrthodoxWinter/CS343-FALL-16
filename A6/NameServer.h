@@ -5,7 +5,7 @@ _Task NameServer {
 	Printer &prt;
 	unsigned int numVendingMachines;
 	unsigned int numStudents;
-	int lastPos;
+	unsigned int count;
 	VendingMachine ** machineList;
 	void main();
 	public:
