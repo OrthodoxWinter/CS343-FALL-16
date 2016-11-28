@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Truck.h"
 #include "BottlingPlant.h"
 #include "VendingMachine.h"
@@ -6,56 +7,62 @@
 
  Truck::Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,
            unsigned int numVendingMachines, unsigned int maxStockPerFlavour ):prt(prt), nameServer(nameServer), plant(plant), numVendingMachines(numVendingMachines), maxStockPerFlavour(maxStockPerFlavour){
- 	cargo = new int[3];
  	lastVendingMachine = 0;
  }
 
 void Truck::main(){
+	printer.print(Printer::Kind::Truck, 'S');
 	VendingMachine** vmList = nameServer->getMachineList();
 	try {
-		OutterLoop:
-		for (;;;){
-			_Accept(~Truck){
-				break;
-		}
-		int randnum = rng(9) + 1;
-		yield(randnum);
-		plant->getShipment(cargo);
-		int count = 0; // Counter for the number of VendingMachine it has vistied
-		while (true){
-			VendingMachine vm = vmList[lastVendingMachine];
-			int* invent = vm->inventory();
-			for (int i = 0; i < 3; i++){
-				if (invent[i] < maxStockPerFlavour && cargo[i] >= 0){
-					int needToAdd = maxStockPerFlavour - invent[i];
-					if (cargo[i] <= needToAdd){
-						invent[i] += cargo[i];
-						cargo[i] = 0;
-					} else {
-						cargo[i] -= needToAdd;
-						invent[i] = maxStockPerFlavour;
-					}
-				}
-			}
-			//Call vending machine restock to notify it has been restocked
-			vm->restocked();
-			lastVendingMachine += 1;
-			counter += 1;
-			// check if the truck is empty < 0
-			int sum = 0
-			for (int i = 0; i < 3; i++){
+		for (;;){
+			yield(rng(9) + 1);
+			plant.getShipment(cargo);
+			unsigned int sum = 0;
+			for (unsigned int i = 0; i < NUM_FLAVORS; i++){
 				sum += cargo[i];
 			}
-			if (sum <= 0 || counter == numVendingMachines){
-				break OutterLoop;
+			printer.print(Printer::Kind:Truck, 'P', sum);
+			unsigned int counter = 0; // Counter for the number of VendingMachine it has vistied
+
+			//Deliver to each vending machine
+			while (true){
+				VendingMachine* vm = vmList[lastVendingMachine];
+				
+				unsigned int machineId = vm->getId();
+				printer.print(Printer::Kind::Truck, 'd', machineId, sum);
+				
+				unsigned int unfilled = 0;
+				unsigned int* invent = vm->inventory();
+
+				//restock each flavor
+				for (int i = 0; i < NUM_FLAVORS; i++){
+					if (invent[i] < maxStockPerFlavour && cargo[i] > 0){
+						int toAdd = min(maxStockPerFlavour - invent[i], cargo[i]);
+						cargo[i] -= toAdd;
+						invent[i] += toadd;
+						sum -= toAdd;
+					}
+					unfilled += maxStockPerFlavour - invent[i];
+				}
+
+				//Call vending machine restock to notify it has been restocked
+				vm->restocked();
+
+				//not entirely sure about this unfilled thing. The description on the assignment is confusing
+				if (unfilled > 0) {
+					printer.print(Printer::Kind::Truck, 'U', machineId, unfilled);
+				}
+
+				printer.print(Printer::Kind::Truck, 'D', machineId, sum);
+				lastVendingMachine = (lastVendingMachine + 1) % numVendingMachines;
+				counter += 1;
+				// check if the truck is empty (ie sum <= 0) or restocked all vending machines
+				if (sum <= 0 || counter >= numVendingMachines) {
+					break;
+				}
 			}
 		}
-	}
 	} catch(_Event Shutdown){
 
 	}
-}
-
-Truck::~Truck(){
-	delete cargo[];
 }

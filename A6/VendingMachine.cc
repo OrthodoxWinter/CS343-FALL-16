@@ -2,8 +2,6 @@
 #include "VendingMachine.h"
 #include "nameServer.h"
 
-#define NUM_FLAVORS 3
-
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
                     unsigned int maxStockPerFlavour): prt(prt),nameServer(nameServer),id(id),sodaCost(sodaCost),maxStockPerFlavour(maxStockPerFlavour){
 	// initialize the inventory array
@@ -36,7 +34,7 @@ void VendingMachine:: main(){
 	}
 }
 
-unsigned int VendingMachine:: *inventory(){
+unsigned int* VendingMachine:: inventory(){
 	isRestocking = true;
 	return ivty;
 }
