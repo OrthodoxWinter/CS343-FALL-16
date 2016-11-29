@@ -13,6 +13,7 @@ void NameServer::VMregister(VendingMachine *vendingmachine){
 }
 VendingMachine * NameServer::getMachine(unsigned int id){
 	int nextMachine = (id + 1) % numVendingMachines;
+	printer.print(Printer::Kind::NameServer, 'N', id, nextMachine);
 	return machineList[nextMachine];
 } 
 VendingMachine ** NameServer::getMachineList(){

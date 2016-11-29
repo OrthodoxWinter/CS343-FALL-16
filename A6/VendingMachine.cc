@@ -19,7 +19,7 @@ void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 	if (ivty[flavour] <= 0){
 		_Throw Stock();
 	}
-	card->withdraw(sodaCost);
+	card.withdraw(sodaCost);
 	ivty[flavour]--;
 }
 

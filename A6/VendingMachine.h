@@ -18,7 +18,7 @@ _Task VendingMachine {
     int ivty[NUM_FLAVORS];
     void main();
   public:
-    enum Flavours { GRAPE = 0, APPLE = 1, ORANGE = 2 };                    // flavours of soda (YOU DEFINE)
+    enum Flavours { GRAPE = 0, APPLE = 1, ORANGE = 2,PINEAPPPLE = 3};                    // flavours of soda (YOU DEFINE)
     _Event Funds {};                          // insufficient funds
     _Event Stock {};                          // out of stock for particular flavour
     VendingMachine( Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
