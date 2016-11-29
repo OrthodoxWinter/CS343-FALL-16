@@ -7,7 +7,7 @@ NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned 
 	};
 
 void NameServer::VMregister(VendingMachine *vendingmachine){
-	printer.print(Printer::kind:NameServer, 'R', vendingmachine->getId());
+	printer.print(Printer::Kind:NameServer, 'R', vendingmachine->getId());
 	machineList[counter] = vendingmachine;
 	counter += 1;
 }
