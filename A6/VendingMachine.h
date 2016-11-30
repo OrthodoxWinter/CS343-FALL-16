@@ -15,7 +15,7 @@ _Task VendingMachine {
     unsigned int sodaCost;
     unsigned int maxStockPerFlavour;
     bool isRestocking;
-    int ivty[NUM_FLAVORS];
+    unsigned int ivty[NUM_FLAVORS];
     void main();
   public:
     enum Flavours { GRAPE = 0, APPLE = 1, ORANGE = 2,PINEAPPPLE = 3};                    // flavours of soda (YOU DEFINE)

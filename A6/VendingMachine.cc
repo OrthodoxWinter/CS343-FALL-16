@@ -1,6 +1,6 @@
 
 #include "VendingMachine.h"
-#include "nameServer.h"
+#include "NameServer.h"
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
                     unsigned int maxStockPerFlavour): prt(prt),nameServer(nameServer),id(id),sodaCost(sodaCost),maxStockPerFlavour(maxStockPerFlavour){
@@ -21,12 +21,12 @@ void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 	}
 	card.withdraw(sodaCost);
 	ivty[flavour]--;
-	printer.print(Printer::Kind:VendingMachine, 'B', flavour, ivty[flavour]);
+	prt.print(Printer::Kind::Vending, 'B', flavour, ivty[flavour]);
 }
 
 void VendingMachine:: main(){
-	nameServer.VMregister(*this);
-	printer.print(Printer::Kind:VendingMachine, 'S', vendingmachine->cost());
+	nameServer.VMregister(this);
+	prt.print(Printer::Kind::Vending, 'S', cost());
 	for (;;){
 		_Accept(~VendingMachine){
 			break;
@@ -34,26 +34,25 @@ void VendingMachine:: main(){
 		or _When(isRestocking) _Accept(restocked);
 		or _When(!isRestocking) _Accept(buy, inventory);
 	}
-	printer.print(Printer::Kind:VendingMachine, 'F', vendingmachine->cost());
+	prt.print(Printer::Kind::Vending, 'F', cost());
 
 }
 
 unsigned int* VendingMachine:: inventory(){
 
 	isRestocking = true;
-	printer.print(Printer::Kind:VendingMachine, 'r');
+	prt.print(Printer::Kind::Vending, 'r');
 
 	return ivty;
 }
 
 void VendingMachine::restocked(){
 	isRestocking = false;
-	printer.print(Printer::Kind:VendingMachine, 'R');
+	prt.print(Printer::Kind::Vending, 'R');
 
 }
 
 
-VendingMachine:: ~VendingMachine(){}
 
 _Nomutex unsigned int VendingMachine:: getId(){
 	return id;

@@ -13,8 +13,8 @@ _Task Truck {
 	unsigned int numVendingMachines;
 	unsigned int maxStockPerFlavour;
 	unsigned int lastVendingMachine; // The last vending Machine restocked
-    void main();
     unsigned int cargo[NUM_FLAVORS];// cargo to store soda
+    void main();
   public:
     Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,
            unsigned int numVendingMachines, unsigned int maxStockPerFlavour );

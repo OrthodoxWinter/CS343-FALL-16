@@ -3,7 +3,7 @@
 #include "printer.h"
 #include "Truck.h"
 #include "NameServer.h"
-
+_Task Truck;
 
 _Task BottlingPlant {
 	Printer &prt;
@@ -13,7 +13,7 @@ _Task BottlingPlant {
 	unsigned int maxShippedPerFlavour;
 	unsigned int maxStockPerFlavour;
 	unsigned int timeBetweenShipments;
-	unsigned int produced[NUM_FLAVORS]; // production
+	unsigned int *produced; // production
 	bool finishPickUp;// flag to know if it has picked up the current run;
 	bool isShutDown;// flag to know if it is shut down
     void main();

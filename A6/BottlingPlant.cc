@@ -2,19 +2,20 @@
 #include "rng.h"
 #include "BottlingPlant.h"
 #include "Truck.h"
+using namespace std;
 BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,
                  unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
                  unsigned int timeBetweenShipments ):prt(prt), nameServer(nameServer), numVendingMachines(numVendingMachines), maxStockPerFlavour(maxShippedPerFlavour), timeBetweenShipments(timeBetweenShipments)
 
  {
  	// create production array
- 	produced = new unsigned int[3];
+ 	produced = new unsigned int[NUM_FLAVORS];
  	isShutDown = false;
  	finishPickUp = true;
  }
 
  void BottlingPlant::main(){
- 	printer.print(Printer::Kind::BottlingPlant, 'S');
+ 	prt.print(Printer::Kind::BottlingPlant, 'S');
  	// start by creating a new truck
  	tr = new Truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
  	for (;;){
@@ -31,12 +32,12 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
  		 		produced[i] += newSoda;
  		 		sum += newSoda;
  		 	}
- 		 	printer.print(Printer::Kind::BottlingPlant, 'G', sum);
+ 		 	prt.print(Printer::Kind::BottlingPlant, 'G', sum);
  		 	yield(timeBetweenShipments);
  		 }
 
  	}
- 	 printer.print(Printer::Kind::BottlingPlant, 'F');
+ 	 prt.print(Printer::Kind::BottlingPlant, 'F');
 
  }
 
@@ -44,11 +45,11 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
  	if (isShutDown){
  		_Throw Shutdown();
  	}
- 	printer.print(Printer::Kind::BottlingPlant, 'P');
+ 	prt.print(Printer::Kind::BottlingPlant, 'P');
  	finishPickUp = false;
  	for (int i = 0; i < NUM_FLAVORS; i++){
- 		cargo[i] = Min(maxShippedPerFlavour, produced[i]);
- 		produced -= Min(maxShippedPerFlavour, produced[i]);
+ 		cargo[i] = min(maxShippedPerFlavour, produced[i]);
+ 		produced -= min(maxShippedPerFlavour, produced[i]);
  	}
  	finishPickUp = true;
  };
