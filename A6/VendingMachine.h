@@ -5,7 +5,7 @@
 #include "printer.h"
 #include "WATcard.h"
 
-#define NUM_FLAVORS 3
+#define NUM_FLAVORS 4
 
 _Task NameServer;
 _Task VendingMachine {

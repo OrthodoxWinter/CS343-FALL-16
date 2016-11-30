@@ -4,7 +4,7 @@
  Student::Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
              unsigned int id, unsigned int maxPurchases ): prt(prt), nameServer(nameServer), cardOffice(cardOffice),groupoff(groupoff),id(id),maxPurchases(maxPurchases){
  	numberToPurchase= rng(maxPurchases)+1;
-	favouriteFlavour = rng(3);
+	favouriteFlavour = rng(NUM_FLAVORS);
 	printer.print(Printer::Kind::Student, 'S', id);
 
  };
@@ -34,7 +34,7 @@ void Student::main(){
 				WATCard::FWATCard transfer( unsigned int sid, unsigned int amount, WATCard *card );
 				card = cardOffice.transfer(id, transferAmount, card());
 			} catch(_Event Stock){
-				vm = nameServer.getMachine();
+				vm = nameServer.getMachine(id);
 				printer.print(Printer::Kind::Student, 'V', vm->getId());
 			}					
 		} else {
@@ -42,9 +42,9 @@ void Student::main(){
 				vm->buy(favouriteFlavour, *(card()));
 				purchasedAmount += 1;
 				printer.print(Printer::Kind::Student, 'G', giftCard->getBalance());
+				giftCard.reset();
 			} catch(_Event Funds){
 				unsigned int transferAmount = vm.cost() + 5;
-				WATCard::FWATCard transfer( unsigned int sid, unsigned int amount, WATCard *giftCard );
 				card = cardOffice.transfer(id, transferAmount, giftCard());
 			} catch(_Event Stock){
 				vm = nameServer.getMachine();

@@ -10,6 +10,8 @@ _Task Student {
 	unsigned int maxPurchases;
 	unsigned int numberToPurchase;
 	unsigned int favouriteFlavour;
+	WATCard::FWATCard card;/// watcard
+	WATCard::FWATCard giftCard; // giftCard
     void main();
   public:
     Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
