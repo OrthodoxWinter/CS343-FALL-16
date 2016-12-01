@@ -28,21 +28,23 @@ void VendingMachine:: main(){
 	prt.print(Printer::Kind::Vending, id, 'S', cost());
 	nameServer.VMregister(this);
 	for (;;){
-		_Accept(~VendingMachine){
-			break;
-		} 
-		or _When(isRestocking) _Accept(restocked);
-		or _When(!isRestocking) _Accept(buy, inventory);
+		try {
+			_Accept(~VendingMachine){
+				break;
+			} 
+			or _When(isRestocking) _Accept(restocked);
+			or _When(!isRestocking) _Accept(buy, inventory);
+		} catch (uMutexFailure::RendezvousFailure) {
+			
+		}
 	}
 	prt.print(Printer::Kind::Vending, id, 'F', cost());
 
 }
 
 unsigned int* VendingMachine:: inventory(){
-
 	isRestocking = true;
 	prt.print(Printer::Kind::Vending, id, 'r');
-
 	return ivty;
 }
 
@@ -51,8 +53,6 @@ void VendingMachine::restocked(){
 	prt.print(Printer::Kind::Vending, id, 'R');
 
 }
-
-
 
 _Nomutex unsigned int VendingMachine:: getId(){
 	return id;

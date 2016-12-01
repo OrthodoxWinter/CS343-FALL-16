@@ -19,7 +19,11 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
  	for (;;){
 		_Accept(~BottlingPlant){
 			isShutDown = true;
-			break;
+			try {
+				_Accept(getShipment);
+			} catch (uMutexFailure::RendezvousFailure) {
+				break;
+			}
 		} _Else {
 		 	// Produce soda!
 			unsigned int sum = 0;// sum of the soda being generated
@@ -39,7 +43,7 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
 
 void BottlingPlant::getShipment( unsigned int cargo[] ){
  	if (isShutDown){
- 		_Throw Shutdown();
+ 		throw Shutdown();
  	}
  	prt.print(Printer::Kind::BottlingPlant, 'P');
  	for (int i = 0; i < NUM_FLAVORS; i++){

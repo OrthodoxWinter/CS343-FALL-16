@@ -21,7 +21,7 @@ void Student::main(){
 	prt.print(Printer::Kind::Student, id, 'V', vm->getId());
 
 	unsigned int purchasedAmount = 0; // Number of purchased soda
-	for (; purchasedAmount < numberToPurchase;){
+	while (purchasedAmount < numberToPurchase){
 		_Select(card || giftCard);
 		yield(rng(9) + 1);
 
@@ -31,13 +31,13 @@ void Student::main(){
 				purchasedAmount += 1;
 				prt.print(Printer::Kind::Student, id, 'B', card()->getBalance());
 
-			} catch(_Event WATCardOffice::Lost){
+			} catch(WATCardOffice::Lost){
 				card = cardOffice.create(id, INITIAL_AMOUNT);
 				prt.print(Printer::Kind::Student, id, 'L');
-			} catch(_Event VendingMachine::Funds){
+			} catch(VendingMachine::Funds){
 				unsigned int transferAmount = vm->cost() + 5;
 				card = cardOffice.transfer(id, transferAmount, card());
-			} catch(_Event VendingMachine::Stock){
+			} catch(VendingMachine::Stock){
 				vm = nameServer.getMachine(id);
 				prt.print(Printer::Kind::Student, id, 'V', vm->getId());
 			}					
@@ -47,23 +47,19 @@ void Student::main(){
 				purchasedAmount += 1;
 				prt.print(Printer::Kind::Student, id, 'G', giftCard()->getBalance());
 				giftCard.reset();
-			} catch(_Event VendingMachine::Funds){
+			} catch(VendingMachine::Funds){
 				unsigned int transferAmount = vm->cost() + 5;
 				card = cardOffice.transfer(id, transferAmount, giftCard());
-			} catch(_Event VendingMachine::Stock){
+			} catch(VendingMachine::Stock){
 				vm = nameServer.getMachine(id);
 				prt.print(Printer::Kind::Student, id, 'V', vm->getId());
 			}					
 
 		}
-		
-
 	}
 	delete giftCard();
 	delete card();
 	prt.print(Printer::Kind::Student, id, 'F');
-
-
 }
 
 

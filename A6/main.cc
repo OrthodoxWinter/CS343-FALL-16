@@ -71,5 +71,5 @@ void uMain::main(){
 	delete nameServer;
 	delete office;
 	delete parent;
-
+	delete groupoff;
 }
