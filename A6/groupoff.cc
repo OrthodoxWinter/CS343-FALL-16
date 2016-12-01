@@ -34,7 +34,7 @@ void Groupoff::main() {
 			numAvailableFutures--;												// decrement numAvailableFutures, thus marking the future we just selected as unavailable
 			WATCard *card = new WATCard();										// create new card with sodaCost in it, and deliver into future
 			card->deposit(sodaCost);
-			printer.print(Printer::Kind::Groupoff, sodaCost);
+			printer.print(Printer::Kind::Groupoff, 'D', sodaCost);
 			toGift.delivery(card);
 			if (numAvailableFutures == 0) break;								// All giftcards have been delivered, so stop
 		}
