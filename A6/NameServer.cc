@@ -16,6 +16,7 @@ void NameServer::VMregister(VendingMachine *vendingmachine){
 	machineList[counter] = vendingmachine;
 	counter += 1;
 }
+
 VendingMachine* NameServer::getMachine(unsigned int id){
 	VendingMachine* nextMachine = machineList[assignments[id]];
 	prt.print(Printer::Kind::NameServer, 'N', id, assignments[id]);

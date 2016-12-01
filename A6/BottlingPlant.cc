@@ -2,60 +2,51 @@
 #include "rng.h"
 #include "BottlingPlant.h"
 #include "Truck.h"
-using namespace std;
+
 BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,
                  unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
-                 unsigned int timeBetweenShipments ):prt(prt), nameServer(nameServer), numVendingMachines(numVendingMachines), maxStockPerFlavour(maxShippedPerFlavour), timeBetweenShipments(timeBetweenShipments)
+                 unsigned int timeBetweenShipments ):prt(prt), nameServer(nameServer), numVendingMachines(numVendingMachines), maxShippedPerFlavour(maxShippedPerFlavour), maxStockPerFlavour(maxStockPerFlavour), timeBetweenShipments(timeBetweenShipments)
 
  {
  	// create production array
- 	produced = new unsigned int[NUM_FLAVORS];
  	isShutDown = false;
- 	finishPickUp = true;
  }
 
  void BottlingPlant::main(){
  	prt.print(Printer::Kind::BottlingPlant, 'S');
  	// start by creating a new truck
- 	tr = new Truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
+ 	Truck tr(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
  	for (;;){
- 		 _Accept(~BottlingPlant){
- 		 	isShutDown = true;
- 		 	break;
- 		 }
- 		 if (finishPickUp){
- 		 	 // Produce soda!
- 		 	int sum = 0;// sum of the soda being generated
-
- 		 	for (int i = 0; i < NUM_FLAVORS; i++){
- 		 		int newSoda = rng(maxShippedPerFlavour);
- 		 		produced[i] += newSoda;
- 		 		sum += newSoda;
- 		 	}
- 		 	prt.print(Printer::Kind::BottlingPlant, 'G', sum);
- 		 	yield(timeBetweenShipments);
- 		 }
+		_Accept(~BottlingPlant){
+			isShutDown = true;
+			break;
+		} _Else {
+		 	// Produce soda!
+			unsigned int sum = 0;// sum of the soda being generated
+			for (unsigned int i = 0; i < NUM_FLAVORS; i++){
+				unsigned int newSoda = (rng() % maxShippedPerFlavour) + 1;
+				produced[i] = newSoda;
+				sum += newSoda;
+			}
+			prt.print(Printer::Kind::BottlingPlant, 'G', sum);
+			yield(timeBetweenShipments);
+			_Accept(getShipment);
+		}
 
  	}
- 	 prt.print(Printer::Kind::BottlingPlant, 'F');
-
+ 	prt.print(Printer::Kind::BottlingPlant, 'F');
  }
 
- void BottlingPlant::getShipment( unsigned int cargo[] ){
+void BottlingPlant::getShipment( unsigned int cargo[] ){
  	if (isShutDown){
  		_Throw Shutdown();
  	}
  	prt.print(Printer::Kind::BottlingPlant, 'P');
- 	finishPickUp = false;
  	for (int i = 0; i < NUM_FLAVORS; i++){
- 		cargo[i] = min(maxShippedPerFlavour, produced[i]);
- 		produced -= min(maxShippedPerFlavour, produced[i]);
+ 		cargo[i] = produced[i];
+ 		produced[i] = 0;
  	}
- 	finishPickUp = true;
- };
-
-
- BottlingPlant::~BottlingPlant(){
- 	delete tr;
- 	delete[] produced;
  }
+
+
+ BottlingPlant::~BottlingPlant(){}

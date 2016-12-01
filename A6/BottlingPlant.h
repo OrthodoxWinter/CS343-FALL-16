@@ -8,13 +8,11 @@ _Task Truck;
 _Task BottlingPlant {
 	Printer &prt;
 	NameServer &nameServer;
-	Truck *tr;
 	unsigned int numVendingMachines;
 	unsigned int maxShippedPerFlavour;
 	unsigned int maxStockPerFlavour;
 	unsigned int timeBetweenShipments;
-	unsigned int *produced; // production
-	bool finishPickUp;// flag to know if it has picked up the current run;
+	unsigned int produced[NUM_FLAVORS]; // production
 	bool isShutDown;// flag to know if it is shut down
     void main();
   public:
