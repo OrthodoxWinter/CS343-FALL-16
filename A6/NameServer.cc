@@ -8,6 +8,7 @@ NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned 
 		for (unsigned int i = 0; i < numStudents; i++){
 			assignments[i] = i % numVendingMachines;
 		}
+		counter = 0;
 	};
 
 void NameServer::VMregister(VendingMachine *vendingmachine){
@@ -31,7 +32,8 @@ void NameServer::main(){
 	for (;;){
 		_Accept(~NameServer){
 			break;
-		} or _When(counter < numVendingMachines) _Accept(VMregister);
+		} 
+		or _When(counter < numVendingMachines) _Accept(VMregister);
 		or _When(counter == numVendingMachines) _Accept(getMachineList, getMachine);
 	}
 	prt.print(Printer::Kind::NameServer, 'F');

@@ -21,12 +21,12 @@ void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 	}
 	card.withdraw(sodaCost);
 	ivty[flavour]--;
-	prt.print(Printer::Kind::Vending, 'B', flavour, ivty[flavour]);
+	prt.print(Printer::Kind::Vending, id, 'B', flavour, ivty[flavour]);
 }
 
 void VendingMachine:: main(){
+	prt.print(Printer::Kind::Vending, id, 'S', cost());
 	nameServer.VMregister(this);
-	prt.print(Printer::Kind::Vending, 'S', cost());
 	for (;;){
 		_Accept(~VendingMachine){
 			break;
@@ -34,21 +34,21 @@ void VendingMachine:: main(){
 		or _When(isRestocking) _Accept(restocked);
 		or _When(!isRestocking) _Accept(buy, inventory);
 	}
-	prt.print(Printer::Kind::Vending, 'F', cost());
+	prt.print(Printer::Kind::Vending, id, 'F', cost());
 
 }
 
 unsigned int* VendingMachine:: inventory(){
 
 	isRestocking = true;
-	prt.print(Printer::Kind::Vending, 'r');
+	prt.print(Printer::Kind::Vending, id, 'r');
 
 	return ivty;
 }
 
 void VendingMachine::restocked(){
 	isRestocking = false;
-	prt.print(Printer::Kind::Vending, 'R');
+	prt.print(Printer::Kind::Vending, id, 'R');
 
 }
 
