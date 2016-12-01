@@ -2,7 +2,7 @@ CXX = u++					# compiler
 CXXFLAGS = -g -multi -Wall -Wno-unused-label -MMD -std=c++11
 MAKEFILE_NAME = ${firstword ${MAKEFILE_LIST}}	# makefile name
 
-OBJECTS = BottlingPlant.o VendingMachine.o NameServer.o Truck.o Student.o printer.o groupoff.o WATcard.o WATcardoffice.o parent.o bank.o  rng.o
+OBJECTS = main.o BottlingPlant.o config.o VendingMachine.o NameServer.o Truck.o Student.o printer.o groupoff.o WATcard.o WATcardoffice.o parent.o bank.o  rng.o
 EXEC = soda
 
 .PHONY : clean
