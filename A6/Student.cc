@@ -22,15 +22,13 @@ void Student::main(){
 
 	unsigned int purchasedAmount = 0; // Number of purchased soda
 	WATCard *availableCard;
-	WATCard *watCardPtr = NULL;
 	WATCard *giftCardPtr = NULL;
 	char state;
 	while (purchasedAmount < numberToPurchase) {
 		_Select(card || giftCard);
 		try {
 			if (card.available()) {
-				watCardPtr = card();
-				availableCard = watCardPtr;
+				availableCard = card();
 				state = 'B';
 			} else {
 				giftCardPtr = giftCard();
@@ -44,7 +42,6 @@ void Student::main(){
 			prt.print(Printer::Kind::Student, id, state, availableCard->getBalance());
 		} catch(WATCardOffice::Lost) {
 			card = cardOffice.create(id, INITIAL_AMOUNT);
-			watCardPtr = NULL;
 			prt.print(Printer::Kind::Student, id, 'L');
 		} catch(VendingMachine::Funds) {
 			unsigned int transferAmount = vm->cost() + 5;
@@ -54,10 +51,9 @@ void Student::main(){
 			prt.print(Printer::Kind::Student, id, 'V', vm->getId());
 		}
 	}
-	if (watCardPtr == NULL) {
-		watCardPtr = card();
-	}
-	delete watCardPtr;
+	try {
+		delete card();
+	} catch (WATCardOffice::Lost) {}
 	if (giftCardPtr == NULL) {
 		giftCardPtr = giftCard();
 	}
