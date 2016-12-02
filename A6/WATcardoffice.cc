@@ -23,7 +23,7 @@ void WATCardOffice::Courier::main() {
 		Job *job = office.requestWork();
 		if (job == NULL) break;
 		Args &args = job->args;
-		if (rng(6) != 7) {
+		if (rng(6) != 3) {
 			printer.print(Printer::Kind::Courier, id, 't', args.sid, args.amount);
 			bank.withdraw(args.sid, args.amount);
 			args.card->deposit(args.amount);
