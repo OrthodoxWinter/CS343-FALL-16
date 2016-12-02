@@ -3,7 +3,7 @@
 
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents ): prt(prt), numVendingMachines(numVendingMachines),numStudents(numStudents){
 		machineList = new VendingMachine*[numVendingMachines];
-		assignments = new int[numVendingMachines];
+		assignments = new int[numStudents];
 		// Initial assignment of vending machine
 		for (unsigned int i = 0; i < numStudents; i++){
 			assignments[i] = i % numVendingMachines;
