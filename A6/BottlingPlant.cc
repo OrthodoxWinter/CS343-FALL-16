@@ -43,7 +43,7 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
 
 void BottlingPlant::getShipment( unsigned int cargo[] ){
  	if (isShutDown){
- 		throw Shutdown();
+ 		_Throw Shutdown();
  	}
  	prt.print(Printer::Kind::BottlingPlant, 'P');
  	for (int i = 0; i < NUM_FLAVORS; i++){
