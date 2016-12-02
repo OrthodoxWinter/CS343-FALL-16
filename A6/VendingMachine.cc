@@ -1,7 +1,8 @@
 
 #include "VendingMachine.h"
 #include "NameServer.h"
-
+#include <iostream>
+using namespace std;
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
                     unsigned int maxStockPerFlavour): prt(prt),nameServer(nameServer),id(id),sodaCost(sodaCost),maxStockPerFlavour(maxStockPerFlavour){
 	// initialize the inventory array
@@ -14,14 +15,16 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 
 void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 	if (card.getBalance() < sodaCost){
-		_Throw Funds();
+		throw Funds();
 	}
 	if (ivty[flavour] <= 0){
-		_Throw Stock();
+		throw Stock();
 	}
 	card.withdraw(sodaCost);
-	ivty[flavour]--;
-	prt.print(Printer::Kind::Vending, id, 'B', flavour, ivty[flavour]);
+	ivty[flavour]-= 1;
+
+	prt.print(Printer::Kind::Vending, id, 'B', (int)flavour, (int)ivty[flavour]);
+
 }
 
 void VendingMachine:: main(){
@@ -38,7 +41,7 @@ void VendingMachine:: main(){
 			
 		}
 	}
-	prt.print(Printer::Kind::Vending, id, 'F', cost());
+	prt.print(Printer::Kind::Vending, id, 'F');
 
 }
 

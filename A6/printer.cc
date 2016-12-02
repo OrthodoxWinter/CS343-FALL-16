@@ -95,6 +95,7 @@ void Printer::print(Kind kind, char state, int value1) {
 }
 
 void Printer::print( Kind kind, char state, int value1, int value2 ) {
+	//cerr << "Print now" << endl;
 	unsigned int index = getIndex(kind);
 	State newState(state, value1, value2);
 	print(index, newState);
