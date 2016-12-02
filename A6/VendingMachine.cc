@@ -14,10 +14,10 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 
 void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 	if (card.getBalance() < sodaCost){
-		_Throw Funds();
+		throw Funds();
 	}
 	if (ivty[flavour] <= 0){
-		_Throw Stock();
+		throw Stock();
 	}
 	card.withdraw(sodaCost);
 	ivty[flavour]--;
