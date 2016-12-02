@@ -46,8 +46,8 @@ void Truck::main(){
 					invent[i] += toAdd;
 					sum -= toAdd;
 				}
-				//Unfill should be the cargo - toAdd
-				unfilled += max((int) (cargo[i] - (maxStockPerFlavour - invent[i])) , 0);
+				//Unfill should be the -(cargo - toAdd), if greater than zero mean we have unfill, if not , means we are able to fill
+				unfilled += max((int) -(cargo[i] - (maxStockPerFlavour - invent[i])) , 0);
 			}
 
 			//Call vending machine restock to notify it has been restocked
