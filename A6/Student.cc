@@ -8,7 +8,7 @@ using namespace std;
  Student::Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
              unsigned int id, unsigned int maxPurchases ): prt(prt), nameServer(nameServer), cardOffice(cardOffice),groupoff(groupoff),id(id),maxPurchases(maxPurchases){
  	numberToPurchase= rng(maxPurchases)+1;
-	int flavorIndex = (int) rng(NUM_FLAVORS);
+	int flavorIndex = (int) rng(NUM_FLAVORS - 1);
 	favouriteFlavour = (VendingMachine::Flavours)flavorIndex;
 	prt.print(Printer::Kind::Student, id, 'S', favouriteFlavour, numberToPurchase);
 
@@ -24,6 +24,7 @@ void Student::main(){
 	WATCard *availableCard;
 	WATCard *giftCardPtr = NULL;
 	char state;
+	yield(rng(9) + 1);
 	while (purchasedAmount < numberToPurchase) {
 		_Select(card || giftCard);
 		try {
@@ -36,10 +37,10 @@ void Student::main(){
 				giftCard.reset();
 				state = 'G';
 			}
-			yield(rng(9) + 1);
 			vm->buy(favouriteFlavour, *availableCard);
 			purchasedAmount++;
 			prt.print(Printer::Kind::Student, id, state, availableCard->getBalance());
+			yield(rng(9) + 1);
 		} catch(WATCardOffice::Lost) {
 			card = cardOffice.create(id, INITIAL_AMOUNT);
 			prt.print(Printer::Kind::Student, id, 'L');

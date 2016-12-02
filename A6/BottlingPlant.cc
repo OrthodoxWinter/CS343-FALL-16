@@ -51,6 +51,3 @@ void BottlingPlant::getShipment( unsigned int cargo[] ){
  		produced[i] = 0;
  	}
  }
-
-
- BottlingPlant::~BottlingPlant(){}
