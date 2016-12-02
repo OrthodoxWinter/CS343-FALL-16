@@ -1,6 +1,7 @@
 #ifndef __WATCARDOFFICE_H__
 #define __WATCARDOFFICE_H__
 
+#include <queue>
 #include "printer.h"
 #include "bank.h"
 #include "WATcard.h"
@@ -36,7 +37,7 @@ _Task WATCardOffice {
     Bank &bank;
     unsigned int numCouriers;
     Courier **couriers;
-    Job *nextJob;
+    std::queue<Job*> jobs;
     bool terminate;
     void main();
   public:
