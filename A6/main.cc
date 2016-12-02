@@ -44,10 +44,11 @@ void uMain::main(){
 
 	Printer printer(params.numStudents, params.numVendingMachines, params.numCouriers);
 	Bank bank(params.numStudents);
+	Groupoff groupoff(printer,params.numStudents, params.sodaCost, params.groupoffDelay);
+
 	Parent* parent = new Parent(printer, bank, params.numStudents, params.parentalDelay);
 	WATCardOffice* office = new WATCardOffice(printer, bank, params.numCouriers);
 	NameServer* nameServer = new NameServer(printer, params.numVendingMachines, params.numStudents);
-	Groupoff* groupoff = new Groupoff(printer,params.numStudents, params.sodaCost, params.groupoffDelay);
 	VendingMachine *vendingMachine[params.numVendingMachines];
 	for (unsigned int i = 0; i < params.numVendingMachines; i++){
 		vendingMachine[i] = new VendingMachine(printer, *nameServer, i, params.sodaCost, params.maxStockPerFlavour);
@@ -56,7 +57,7 @@ void uMain::main(){
 	BottlingPlant* plant = new BottlingPlant(printer, *nameServer, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
 	Student* students[params.numStudents];
 	for (unsigned int i = 0; i < params.numStudents; i++){
-		students[i] = new Student(printer, *nameServer, *office, *groupoff, i, params.maxPurchases);
+		students[i] = new Student(printer, *nameServer, *office, groupoff, i, params.maxPurchases);
 	}
 
 	for (unsigned int i = 0 ; i < params.numStudents; i++){
@@ -71,5 +72,4 @@ void uMain::main(){
 	delete nameServer;
 	delete office;
 	delete parent;
-	delete groupoff;
 }
