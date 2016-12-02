@@ -23,7 +23,7 @@ void WATCardOffice::Courier::main() {
 		Job *job = office.requestWork();
 		if (job == NULL) break;
 		Args &args = job->args;
-		if (rng(6) != 7) {
+		if (rng(6) != 3) {
 			printer.print(Printer::Kind::Courier, id, 't', args.sid, args.amount);
 			bank.withdraw(args.sid, args.amount);
 			args.card->deposit(args.amount);
@@ -48,29 +48,30 @@ void WATCardOffice::main() {
 			}
 			break;
 		}
-		or _Accept(create, transfer) {
-			_Accept(requestWork);
-		}
+		or _Accept(create, transfer);
+		or _When(jobs.size() > 0) _Accept(requestWork);
 	}
 	printer.print(Printer::Kind::WATCardOffice, 'F');
 }
 
 WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount) {
 	WATCard *card = new WATCard();
-	nextJob = new Job(Args(sid, card, amount));
+	Job *nextJob = new Job(Args(sid, card, amount));
+	jobs.push(nextJob);
 	printer.print(Printer::Kind::WATCardOffice, 'C', sid, amount);
 	return nextJob->result;
 }
 
 WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount, WATCard *card) {
-	nextJob = new Job(Args(sid, card, amount));
+	Job *nextJob = new Job(Args(sid, card, amount));
 	printer.print(Printer::Kind::WATCardOffice, 'T', sid, amount);
+	jobs.push(nextJob);
 	return nextJob->result;
 }
 
 WATCardOffice::Job *WATCardOffice::requestWork() {
 	if (terminate) return NULL;
-	Job *job = nextJob;
-	nextJob = NULL;
+	Job *job = jobs.front();
+	jobs.pop();
 	return job;
 }
