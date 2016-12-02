@@ -8,7 +8,7 @@ using namespace std;
  Student::Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
              unsigned int id, unsigned int maxPurchases ): prt(prt), nameServer(nameServer), cardOffice(cardOffice),groupoff(groupoff),id(id),maxPurchases(maxPurchases){
  	numberToPurchase= rng(maxPurchases)+1;
-	int flavorIndex = (int) rng(NUM_FLAVORS);
+	int flavorIndex = (int) rng(NUM_FLAVORS - 1);
 	favouriteFlavour = (VendingMachine::Flavours)flavorIndex;
 	prt.print(Printer::Kind::Student, id, 'S', favouriteFlavour, numberToPurchase);
 
