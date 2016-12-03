@@ -23,7 +23,8 @@ VendingMachine* NameServer::getMachine(unsigned int id){
 	// Update the assignment to the next Machine
 	assignments[id] = (assignments[id] + 1) % numVendingMachines;
 	return nextMachine;
-} 
+}
+
 VendingMachine ** NameServer::getMachineList(){
 	return machineList;
 }
