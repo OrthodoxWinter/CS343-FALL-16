@@ -48,8 +48,8 @@ void WATCardOffice::main() {
 			}
 			break;
 		}
-		or _Accept(create, transfer);
 		or _When(jobs.size() > 0) _Accept(requestWork);
+		or _Accept(create, transfer);
 	}
 	printer.print(Printer::Kind::WATCardOffice, 'F');
 }
