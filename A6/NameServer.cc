@@ -23,19 +23,22 @@ VendingMachine* NameServer::getMachine(unsigned int id){
 	// Update the assignment to the next Machine
 	assignments[id] = (assignments[id] + 1) % numVendingMachines;
 	return nextMachine;
-} 
+}
+
 VendingMachine ** NameServer::getMachineList(){
 	return machineList;
 }
 
 void NameServer::main(){
 	prt.print(Printer::Kind::NameServer, 'S');
+	for (unsigned int i = 0; i < numVendingMachines; i++) {
+		_Accept(VMregister);
+	}
 	for (;;){
 		_Accept(~NameServer){
 			break;
 		} 
-		or _When(counter < numVendingMachines) _Accept(VMregister);
-		or _When(counter == numVendingMachines) _Accept(getMachineList, getMachine);
+		or _Accept(getMachineList, getMachine);
 	}
 	prt.print(Printer::Kind::NameServer, 'F');
 

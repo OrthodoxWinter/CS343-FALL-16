@@ -13,7 +13,7 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 };
 
 
-void VendingMachine:: buy( Flavours flavour, WATCard &card ){
+void VendingMachine::buy( Flavours flavour, WATCard &card ){
 	if (card.getBalance() < sodaCost){
 		_Throw Funds();
 	}
@@ -27,7 +27,7 @@ void VendingMachine:: buy( Flavours flavour, WATCard &card ){
 
 }
 
-void VendingMachine:: main(){
+void VendingMachine::main(){
 	prt.print(Printer::Kind::Vending, id, 'S', cost());
 	nameServer.VMregister(this);
 	for (;;){
@@ -36,7 +36,7 @@ void VendingMachine:: main(){
 				break;
 			} 
 			or _When(isRestocking) _Accept(restocked);
-			or _When(!isRestocking) _Accept(buy, inventory);
+			or _When(!isRestocking) _Accept(inventory, buy);
 		} catch (uMutexFailure::RendezvousFailure) {
 			
 		}
@@ -45,7 +45,7 @@ void VendingMachine:: main(){
 
 }
 
-unsigned int* VendingMachine:: inventory(){
+unsigned int* VendingMachine::inventory(){
 	isRestocking = true;
 	prt.print(Printer::Kind::Vending, id, 'r');
 	return ivty;
@@ -54,14 +54,13 @@ unsigned int* VendingMachine:: inventory(){
 void VendingMachine::restocked(){
 	isRestocking = false;
 	prt.print(Printer::Kind::Vending, id, 'R');
-
 }
 
-_Nomutex unsigned int VendingMachine:: getId(){
+_Nomutex unsigned int VendingMachine::getId(){
 	return id;
 }
 
-_Nomutex unsigned int VendingMachine:: cost(){
+_Nomutex unsigned int VendingMachine::cost(){
 	return sodaCost;
 }
 
