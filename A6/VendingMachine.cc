@@ -14,9 +14,11 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 
 
 void VendingMachine::buy( Flavours flavour, WATCard &card ){
+	// check insufficent fund case
 	if (card.getBalance() < sodaCost){
 		_Throw Funds();
 	}
+	// check out of stock case
 	if (ivty[flavour] <= 0){
 		_Throw Stock();
 	}
@@ -36,7 +38,7 @@ void VendingMachine::main(){
 				break;
 			} 
 			or _When(isRestocking) _Accept(restocked);
-			or _When(!isRestocking) _Accept(inventory, buy);
+			or _When(!isRestocking) _Accept(inventory, buy);// can accept call when it is restocking
 		} catch (uMutexFailure::RendezvousFailure) {
 			
 		}

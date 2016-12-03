@@ -2,15 +2,16 @@
 #include "VendingMachine.h"
 
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents ): prt(prt), numVendingMachines(numVendingMachines),numStudents(numStudents){
-		machineList = new VendingMachine*[numVendingMachines];
-		assignments = new int[numStudents];
-		// Initial assignment of vending machine
-		for (unsigned int i = 0; i < numStudents; i++){
-			assignments[i] = i % numVendingMachines;
-		}
-		counter = 0;
-	};
-
+	// allocate the array
+	machineList = new VendingMachine*[numVendingMachines];
+	assignments = new int[numStudents];
+	// Initial assignment of vending machine
+	for (unsigned int i = 0; i < numStudents; i++){
+		assignments[i] = i % numVendingMachines;
+	}
+	counter = 0;
+};
+/* Register the virtual machine */
 void NameServer::VMregister(VendingMachine *vendingmachine){
 	prt.print(Printer::Kind::NameServer, 'R', vendingmachine->getId());
 	machineList[counter] = vendingmachine;

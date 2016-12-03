@@ -6,9 +6,9 @@
 
 _Task Parent {
 	Printer &printer;
-	Bank &bank;
-	const unsigned int numStudents;
-	const unsigned int parentalDelay;
+	Bank &bank; // bank to deposit money
+	const unsigned int numStudents; // total number of student 
+	const unsigned int parentalDelay;// delay for parent
     void main();
   public:
     Parent( Printer &prt, Bank &bank, unsigned int numStudents, unsigned int parentalDelay );

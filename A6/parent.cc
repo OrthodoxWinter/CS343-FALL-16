@@ -6,14 +6,16 @@ Parent::Parent( Printer &prt, Bank &bank, unsigned int numStudents, unsigned int
 void Parent::main() {
 	printer.print(Printer::Kind::Parent, 'S');
 	for (;;) {
+		//Accept destructor
 		_Accept(~Parent) {
 			break;
 		}
 		_Else {
 			yield(parentalDelay);
+			//Give random amount of money
 			unsigned int amount = rng(2) + 1;
 			unsigned int student = rng() % numStudents;
-			bank.deposit(student, amount);
+			bank.deposit(student, amount);// deposit that number of amount
 		}
 	}
 	printer.print(Printer::Kind::Parent, 'F');

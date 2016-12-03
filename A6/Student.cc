@@ -34,14 +34,14 @@ void Student::main(){
 			} else {
 				giftCardPtr = giftCard();
 				availableCard = giftCardPtr;
-				giftCard.reset();
+				giftCard.reset();// Once used reset the giftCard 
 				state = 'G';
 			}
 			vm->buy(favouriteFlavour, *availableCard);
 			purchasedAmount++;
 			prt.print(Printer::Kind::Student, id, state, availableCard->getBalance());
 			yield(rng(9) + 1);
-		} catch(WATCardOffice::Lost) {
+		} catch(WATCardOffice::Lost) {// Attempt to rebuy if any exception thrown
 			card = cardOffice.create(id, INITIAL_AMOUNT);
 			prt.print(Printer::Kind::Student, id, 'L');
 		} catch(VendingMachine::Funds) {
@@ -52,6 +52,7 @@ void Student::main(){
 			prt.print(Printer::Kind::Student, id, 'V', vm->getId());
 		}
 	}
+	//Do clean up
 	try {
 		delete card();
 	} catch (WATCardOffice::Lost) {}

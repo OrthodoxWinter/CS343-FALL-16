@@ -6,9 +6,9 @@
 
 _Task Groupoff {
 	Printer &printer;
-	unsigned int numStudents;
-	unsigned int sodaCost;
-	unsigned int groupoffDelay;
+	unsigned int numStudents;// total number of students
+	unsigned int sodaCost; // soda costs
+	unsigned int groupoffDelay; // groupoffDelay
 	WATCard::FWATCard *futureCards;
 	unsigned int nextFuture;
     void main();

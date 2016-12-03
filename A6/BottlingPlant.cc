@@ -8,7 +8,7 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
                  unsigned int timeBetweenShipments ):prt(prt), nameServer(nameServer), numVendingMachines(numVendingMachines), maxShippedPerFlavour(maxShippedPerFlavour), maxStockPerFlavour(maxStockPerFlavour), timeBetweenShipments(timeBetweenShipments)
 
  {
- 	// create production array
+ 	// set the shutdown Variable
  	isShutDown = false;
  }
 
@@ -18,14 +18,14 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
  	Truck tr(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
  	for (;;){
 		_Accept(~BottlingPlant){
-			isShutDown = true;
+			isShutDown = true; // set the shutdown variable
 			try {
 				_Accept(getShipment);
 			} catch (uMutexFailure::RendezvousFailure) {
 				break;
 			}
 		} _Else {
-		 	// Produce soda!
+		 	// start Production soda run
 			unsigned int sum = 0;// sum of the soda being generated
 			for (unsigned int i = 0; i < NUM_FLAVORS; i++){
 				unsigned int newSoda = (rng() % maxShippedPerFlavour) + 1;
@@ -46,6 +46,7 @@ void BottlingPlant::getShipment( unsigned int cargo[] ){
  		_Throw Shutdown();
  	}
  	prt.print(Printer::Kind::BottlingPlant, 'P');
+ 	// Any soda still in the plant is thrown away as it past the due date
  	for (int i = 0; i < NUM_FLAVORS; i++){
  		cargo[i] = produced[i];
  		produced[i] = 0;

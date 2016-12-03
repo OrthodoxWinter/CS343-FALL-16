@@ -2,6 +2,7 @@
 #include "groupoff.h"
 
 Groupoff::Groupoff( Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay ) : printer(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay) {
+	//Initialize array
 	futureCards = new WATCard::FWATCard[numStudents];
 	nextFuture = 0;
 }
@@ -19,6 +20,7 @@ WATCard::FWATCard Groupoff::giftCard() {
 void Groupoff::main() {
 	printer.print(Printer::Kind::Groupoff, 'S');
 	unsigned int numAvailableFutures = numStudents;
+	//begins by accepting a call from each student to obtain a future card
 	for (unsigned int i = 0; i < numStudents; i++) {
 		_Accept(giftCard);
 	}
