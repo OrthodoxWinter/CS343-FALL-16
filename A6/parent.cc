@@ -15,7 +15,8 @@ void Parent::main() {
 			//Give random amount of money
 			unsigned int amount = rng(2) + 1;
 			unsigned int student = rng() % numStudents;
-			bank.deposit(student, amount);// deposit that number of amount
+			// deposit that number of amount
+			bank.deposit(student, amount);
 		}
 	}
 	printer.print(Printer::Kind::Parent, 'F');

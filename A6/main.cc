@@ -23,9 +23,11 @@ void usage(char *argv[]) {
 }
 
 void uMain::main(){
+	//default parameters
 	int seed = getpid();
 	ConfigParms params;
 	string configPath = "soda.config";
+	//read command line parameters
 	switch(argc){
 		case 3:
 			seed = atoi(argv[2]);
@@ -40,8 +42,10 @@ void uMain::main(){
 		default:
 			usage(argv);
 	}
+	//process config
 	processConfigFile(configPath.c_str(), params);
 
+	//create objects
 	Printer printer(params.numStudents, params.numVendingMachines, params.numCouriers);
 	Bank bank(params.numStudents);
 	Groupoff groupoff(printer,params.numStudents, params.sodaCost, params.groupoffDelay);
@@ -59,11 +63,11 @@ void uMain::main(){
 	for (unsigned int i = 0; i < params.numStudents; i++){
 		students[i] = new Student(printer, *nameServer, *office, groupoff, i, params.maxPurchases);
 	}
-
+	//wait for students to finish
 	for (unsigned int i = 0 ; i < params.numStudents; i++){
 		delete students[i];
 	}
-
+	//delete everything else
 	delete plant;
 	for (unsigned int i = 0 ; i < params.numVendingMachines; i++){
 		delete vendingMachine[i];

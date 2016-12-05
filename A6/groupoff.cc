@@ -25,20 +25,26 @@ void Groupoff::main() {
 		_Accept(giftCard);
 	}
 	for (;;) {
+		//break on destructor
 		_Accept(~Groupoff) {
 			break;
 		} _Else {
 			yield(groupoffDelay);
-			unsigned int selection = rng() % numAvailableFutures;				// randomly select a future
+			// randomly select a future
+			unsigned int selection = rng() % numAvailableFutures;
 			WATCard::FWATCard toGift = futureCards[selection];
-			futureCards[selection] = futureCards[numAvailableFutures - 1];		// swap the future we just selected into the last position
+			// swap the future we just selected into the last position
+			futureCards[selection] = futureCards[numAvailableFutures - 1];
 			futureCards[numAvailableFutures - 1] = toGift;
-			numAvailableFutures--;												// decrement numAvailableFutures, thus marking the future we just selected as unavailable
-			WATCard *card = new WATCard();										// create new card with sodaCost in it, and deliver into future
+			// decrement numAvailableFutures, thus marking the future we just selected as unavailable
+			numAvailableFutures--;
+			// create new card with sodaCost in it, and deliver into future
+			WATCard *card = new WATCard();
 			card->deposit(sodaCost);
 			printer.print(Printer::Kind::Groupoff, 'D', sodaCost);
 			toGift.delivery(card);
-			if (numAvailableFutures == 0) break;								// All giftcards have been delivered, so stop
+			// All giftcards have been delivered, so stop
+			if (numAvailableFutures == 0) break;
 		}
 	}
 	printer.print(Printer::Kind::Groupoff, 'F');

@@ -16,11 +16,13 @@ void Truck::main(){
 	VendingMachine** vmList = nameServer.getMachineList();
 	for (;;){
 		yield(rng(9) + 1);
+		//obtain the cargo, and break if plant is shut down
 		try {
 			plant.getShipment(cargo);
 		} catch (BottlingPlant::Shutdown) {
 			break;
 		}
+		//count total number of bottles
 		unsigned int sum = 0;
 		for (unsigned int i = 0; i < NUM_FLAVORS; i++){
 			sum += cargo[i];
@@ -53,7 +55,6 @@ void Truck::main(){
 			//Call vending machine restock to notify it has been restocked
 			vm->restocked();
 
-			//not entirely sure about this unfilled thing. The description on the assignment is confusing
 			if (unfilled > 0) {
 				prt.print(Printer::Kind::Truck, 'U', machineId, unfilled);
 			}

@@ -22,6 +22,7 @@ void VendingMachine::buy( Flavours flavour, WATCard &card ){
 	if (ivty[flavour] <= 0){
 		_Throw Stock();
 	}
+	// allow the purchase of soda
 	card.withdraw(sodaCost);
 	ivty[flavour]-= 1;
 
@@ -37,8 +38,8 @@ void VendingMachine::main(){
 			_Accept(~VendingMachine){
 				break;
 			} 
-			or _When(isRestocking) _Accept(restocked);
-			or _When(!isRestocking) _Accept(inventory, buy);// can accept call when it is restocking
+			or _When(isRestocking) _Accept(restocked); // only accpet restocked when restocking
+			or _When(!isRestocking) _Accept(inventory, buy); // only accept inventory/buy when it is not restocking. Inventory has higher priority to prevent starvation
 		} catch (uMutexFailure::RendezvousFailure) {
 			
 		}

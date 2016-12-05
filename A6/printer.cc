@@ -6,6 +6,7 @@ using namespace std;
 Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers )	 : numStudents(numStudents), numVendingMachines(numVendingMachines), numCouriers(numCouriers) {
 	total = 6 + numStudents + numVendingMachines + numCouriers;
 	states = new State[total];
+	//printer the header
 	cout << "Parent" << '\t';
 	cout << "Gropoff" << '\t';
 	cout << "WATOff" << '\t';
@@ -25,9 +26,11 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 
 Printer::~Printer() {
 	delete[] states;
+	//printer the footer
 	cout << "***********************" << endl;
 }
 
+//print the same string n times, separated by tabs. Optionally append index at the end of string
 void Printer::printLoop(unsigned int times, string value, bool withIndex) {
 	for (unsigned int i = 0; i < times; i++) {
 		cout << value;
@@ -36,6 +39,7 @@ void Printer::printLoop(unsigned int times, string value, bool withIndex) {
 	}
 }
 
+//get the corresponding index in the state array
 unsigned int Printer::getIndex(Kind kind, unsigned int id) {
 	switch (kind) {
 		case Student:
@@ -49,11 +53,14 @@ unsigned int Printer::getIndex(Kind kind, unsigned int id) {
 	}
 }
 
+//flushes all the states and set each to empty. Takes a parameter for what to print for empty states
 void Printer::flush(string empty) {
 	for (unsigned int i = 0; i < total; i++) {
+		//'\0' represents empty state
 		if (states[i].state == '\0') {
 			cout << empty;
 		} else {
+			//print out the state
 			cout << states[i].state;
 			if (states[i].value1 >= 0) {
 				cout << states[i].value1;
@@ -66,14 +73,18 @@ void Printer::flush(string empty) {
 	cout << endl;
 }
 
+//attempt to set state at index to newState. If old state is non-empty, then flush
 void Printer::print(unsigned int index, State &newState) {
+	//new State is 'F', so need to flush
 	if (newState.state == 'F') {
 		for (unsigned int i = 0; i < total; i++) {
+			//if all states are empty, then don't flush because otherwise there would be an extra empty line
 			if (states[i].state != '\0') {
 				flush();
 				break;
 			}
 		}
+		//print out the F state
 		states[index] = newState;
 		flush("...");
 	} else {
@@ -95,7 +106,6 @@ void Printer::print(Kind kind, char state, int value1) {
 }
 
 void Printer::print( Kind kind, char state, int value1, int value2 ) {
-	//cerr << "Print now" << endl;
 	unsigned int index = getIndex(kind);
 	State newState(state, value1, value2);
 	print(index, newState);

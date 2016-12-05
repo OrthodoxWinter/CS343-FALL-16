@@ -45,9 +45,11 @@ void Student::main(){
 			card = cardOffice.create(id, INITIAL_AMOUNT);
 			prt.print(Printer::Kind::Student, id, 'L');
 		} catch(VendingMachine::Funds) {
+			//transfer if not enough money on card
 			unsigned int transferAmount = vm->cost() + 5;
 			card = cardOffice.transfer(id, transferAmount, availableCard);
 		} catch(VendingMachine::Stock) {
+			//get new vm if out of stock
 			vm = nameServer.getMachine(id);
 			prt.print(Printer::Kind::Student, id, 'V', vm->getId());
 		}
