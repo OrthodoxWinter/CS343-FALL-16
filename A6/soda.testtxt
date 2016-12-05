@@ -35,6 +35,7 @@ Error: file "soda.config4" parameter MaxPurchases value 0 must be positive.
 Analysis: Check invalid parameter values, should throw error
 ______________________________Seperate line_______________________________________________________________________________
 TEST 4:
+Run Command:./soda soda.config4 46671
 Input:
 SodaCost 1 # Manufacturer Suggested Retail Price (MSRP) per bottle
 NumStudents 3 # number of students to create
@@ -52,6 +53,7 @@ Error: file "soda.config4" parameter NumCouriers value 0 must be positive.
 Analysis: Check invalid parameter values, should throw error
 ______________________________Seperate line_______________________________________________________________________________
 TEST 5:
+Run Command:./soda soda.config4 46671
 Input:
 SodaCost -1 # Manufacturer Suggested Retail Price (MSRP) per bottle
 NumStudents 3 # number of students to create
@@ -69,6 +71,7 @@ Error: file "soda.config4" parameter SodaCost value -1 must be positive.
 Analysis: Check invalid parameter values, should throw error
 ______________________________Seperate line_______________________________________________________________________________
 TEST 6:
+Run Command:./soda soda.config4 46671
 Input:: 
 SodaCost 2 # Manufacturer Suggested Retail Price (MSRP) per bottle
 NumStudents 1 # number of students to create
@@ -545,4 +548,5 @@ S	S	S	S			S3,3	S2,6	S1,3	S1,5	S1,1	S1,1	S2,2	S2,6	S3,2	S1,4	S3,6	S1,3	S3,1	S2,5	
 ...	...	F	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	......	...	...	...	...	...	...	...	
 F	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	......	...	...	...	...	...	...	...	
 ***********************
+Analysis: Test the case there are many students, we can see the vending machine is assigned correctly, and exception are handled correctly.
 ______________________________Seperate line_______________________________________________________________________________
