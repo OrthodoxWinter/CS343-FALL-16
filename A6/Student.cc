@@ -25,21 +25,24 @@ void Student::main(){
 	WATCard *giftCardPtr = NULL;
 	char state;
 	yield(rng(9) + 1);
+	bool isGiftcard = false;
 	while (purchasedAmount < numberToPurchase) {
 		_Select(card || giftCard);
 		try {
 			if (card.available()) {
 				availableCard = card();
+				isGiftcard = false;
 				state = 'B';
 			} else {
 				giftCardPtr = giftCard();
 				availableCard = giftCardPtr;
-				giftCard.reset();// Once used reset the giftCard 
+				isGiftcard = true;
 				state = 'G';
 			}
 			vm->buy(favouriteFlavour, *availableCard);
 			purchasedAmount++;
 			prt.print(Printer::Kind::Student, id, state, availableCard->getBalance());
+			if (isGiftcard) giftCard.reset();
 			yield(rng(9) + 1);
 		} catch(WATCardOffice::Lost) {// Attempt to rebuy if any exception thrown
 			card = cardOffice.create(id, INITIAL_AMOUNT);
